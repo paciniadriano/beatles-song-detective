@@ -26,6 +26,8 @@ link to the exact revision of the article it came from.
 
 **Try it:** [Beatles Song Detective on Hugging Face Spaces](https://huggingface.co/spaces/adrianopacini/beatles-song-detective)
 
+**Code:** [paciniadriano/beatles-song-detective on GitHub](https://github.com/paciniadriano/beatles-song-detective)
+
 > **Required: an OpenAI API key** (the only key the app uses). Paste it in the box at the top of the page.
 > It is used for your questions only, never stored and never logged.
 > A question costs about $0.0002–0.0005 (an estimate is shown under each
