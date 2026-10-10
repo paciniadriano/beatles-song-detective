@@ -1,0 +1,941 @@
+# Audit of the retrieval pool. For each question, set `verdict` to accepted or
+# rejected, and write a short `note` when rejecting. Reject when:
+#   - the evidence does not support the answer
+#   - the question could also be about another song, album or person
+#   - the evidence or the answer is song lyrics
+#   - it does not read like something a curious fan would ask
+# Then run: python -m src.eval.audit_sample --report
+
+- question_id: wp_29812__s28__q0
+  article: The Beatles
+  section: Song catalogue
+  question: What did George Harrison do when his contract with Northern Songs ended?
+  answer: He signed with Apple Publishing and kept the copyright to his work from then on.
+  evidence: Harrison did not renew his contract with Northern Songs when it ended, signing instead with
+    Apple Publishing while retaining the copyright to his work from that point on.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_13736167__s0__q0
+  article: Paul McCartney
+  section: '1957–1960: The Quarrymen'
+  question: What role did Paul McCartney take when he joined John Lennon's band, the Quarrymen?
+  answer: He joined as a rhythm guitarist.
+  evidence: Soon afterwards, the members of the band invited McCartney to join as a rhythm guitarist,
+    and he formed a close working relationship with Lennon.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_1119469__s2__q0
+  article: All You Need Is Love
+  section: Main portion
+  question: What unusual pattern of beats did the Beatles use in the verses of “All You Need Is Love”?
+  answer: 'The verse pattern has 29 beats: two 7-beat measures, one 8-beat measure, then another 7-beat
+    measure before it repeats.'
+  evidence: The main verse pattern contains a total of 29 beats, split into two 7/4 measures, a single
+    bar of 8/4, followed by a one bar return of 7/4 before repeating the pattern.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_6646682__s3__q0
+  article: Sour Milk Sea
+  section: The Beatles' demo
+  question: How did George Harrison sing on the Beatles’ Kinfauns demo of “Sour Milk Sea”?
+  answer: He sang in falsetto throughout.
+  evidence: The performance features Harrison singing falsetto throughout, and a musical backing that
+    includes guitars and percussion.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_1981279__s2__q0
+  article: Oh! Darling
+  section: Recording
+  question: Why did Paul McCartney sing “Oh! Darling” with the backing track playing through speakers
+    instead of headphones?
+  answer: He wanted to feel as though he was singing to a live audience.
+  evidence: McCartney sang while the backing track played over speakers, instead of headphones, because
+    he wanted to feel as though he was singing to a live audience.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_1712323__s5__q0
+  article: You Know My Name (Look Up the Number)
+  section: In popular culture
+  question: What do Pixies often play as they take the stage for a performance?
+  answer: A recording of “You Know My Name (Look Up the Number).”
+  evidence: Since 2017, the band often plays a recording of the song as they take the stage for a performance.
+  verdict: 'accepted'
+  note: ''
+- question_id: wp_15852__s0__q0
+  article: John Lennon
+  section: 'Formation, fame and touring: 1956–1966'
+  question: Why did John Lennon initially hesitate to let George Harrison join the Quarrymen?
+  answer: He thought Harrison was too young.
+  evidence: Lennon thought that Harrison, then 14 years old, was too young.
+  verdict: accepted
+  note: ''
+- question_id: wp_142509__s3__q0
+  article: Magical Mystery Tour
+  section: Production techniques and sounds
+  question: How did the engineers make John Lennon's voice sound as if it came from the moon on “I Am
+    the Walrus”?
+  answer: They had him sing into a low-quality microphone and saturated the signal from the preamp microphone.
+  evidence: To satisfy Lennon's request that his voice should sound like "it came from the moon", the
+    engineers gave him a low-quality microphone to sing into and saturated the signal from the preamp
+    microphone.
+  verdict: accepted
+  note: ''
+- question_id: wp_655960__s7__q0
+  article: Michelle (song)
+  section: McCartney live performances
+  question: What did Michelle Obama do while Paul McCartney performed “Michelle” for her at the White
+    House?
+  answer: She sang along from her seat.
+  evidence: McCartney performed the song for Michelle Obama, who sang along from her seat.
+  verdict: accepted
+  note: ''
+- question_id: wp_1350087__s0__q0
+  article: Think for Yourself
+  section: Introduction
+  question: What unusual bass arrangement did the Beatles use on “Think for Yourself”?
+  answer: 'They used two bass parts: one standard and one played through a fuzzbox.'
+  evidence: In a departure from convention, the track includes two bass guitar parts – one standard and
+    one played through a fuzzbox.
+  verdict: accepted
+  note: ''
+- question_id: wp_4232418__s0__q0
+  article: Maggie May (folk song)
+  section: Introduction
+  question: What is the traditional Liverpool folk song “Maggie May” about?
+  answer: It is about a prostitute who robbed a sailor coming home from a round trip.
+  evidence: '"Maggie May" (or "Maggie Mae") (Roud No. 1757) is a traditional Liverpool folk song about
+    a prostitute who robbed a "homeward bounder", a sailor coming home from a round trip.'
+  verdict: accepted
+  note: ''
+- question_id: wp_6646682__s1__q0
+  article: Sour Milk Sea
+  section: Background and inspiration
+  question: How quickly did George Harrison write the music for “Sour Milk Sea,” and why did he borrow
+    John Lennon’s guitar?
+  answer: He wrote it in ten minutes and borrowed Lennon’s guitar because he didn’t have one with him.
+  evidence: he wrote the music "in ten minutes" since he was without a guitar at the time and had to borrow
+    John Lennon's.
+  verdict: accepted
+  note: ''
+- question_id: wp_2254939__s1__q0
+  article: I'll Get You
+  section: Structure
+  question: What happened with John Lennon's harmonica on the Beatles' song "I'll Get You"?
+  answer: It was overdubbed in a rush as session time ran out.
+  evidence: The most prominent instruments in the track are McCartney's "plumply rounded bass" and Lennon's
+    harmonica, which was overdubbed in a rush as session time ran out.
+  verdict: accepted
+  note: ''
+- question_id: wp_1327328__s8__q0
+  article: Rain (Beatles song)
+  section: Personnel
+  question: What did Ringo Starr play on the Beatles song “Rain”?
+  answer: He played drums and tambourine.
+  evidence: Ringo Starr – drums, tambourine
+  verdict: accepted
+  note: ''
+- question_id: wp_24101956__s1__q0
+  article: The Beatles in India
+  section: Background
+  question: Why did Paul McCartney urge the Beatles to delay their planned trip to the Maharishi’s training
+    centre in India?
+  answer: He thought that after Brian Epstein’s death, the band should focus on their career first.
+  evidence: At Paul McCartney's urging, they postponed the trip until the new year to work on their Magical
+    Mystery Tour film project, since he was concerned that, with the loss of Epstein, the band should
+    first focus on their career.
+  verdict: accepted
+  note: ''
+- question_id: wp_2252176__s4__q0
+  article: Another Girl
+  section: In the film Help!
+  question: In the Help! film scene for “Another Girl,” why does George Harrison mime Paul McCartney’s
+    guitar fills?
+  answer: McCartney’s hands are occupied with either the bass or a girl.
+  evidence: Since McCartney's hands are occupied (with either bass or girl), Harrison mimes McCartney's
+    guitar fills.
+  verdict: accepted
+  note: ''
+- question_id: wp_11690880__s1__q0
+  article: Eight Days a Week
+  section: Inspiration
+  question: Where did Paul McCartney say he got the title for the Beatles song “Eight Days a Week”?
+  answer: From a chauffeur who drove him to John Lennon's house in Weybridge.
+  evidence: McCartney subsequently credited the title to an actual chauffeur who once drove him to Lennon's
+    house in Weybridge.
+  verdict: accepted
+  note: ''
+- question_id: wp_11343196__s5__q0
+  article: Let It Be... Naked
+  section: Personnel
+  question: What unusual string instruments did John Lennon play on Let It Be... Naked?
+  answer: He played six-string bass guitar and lap steel guitar.
+  evidence: John Lennon – vocals, guitars, six-string bass guitar, lap steel guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_1329366__s7__q0
+  article: Here Comes the Sun
+  section: Cultural references and legacy
+  question: What did Carl Sagan try to include on a disc sent with the Voyager spacecraft?
+  answer: He tried to include the Beatles’ song “Here Comes the Sun” on the disc.
+  evidence: In 1977, astronomer and science populariser Carl Sagan attempted to have "Here Comes the Sun"
+    included on a disc of music accompanying the Voyager space mission.
+  verdict: accepted
+  note: "it is correct"
+- question_id: wp_155421__s10__q0
+  article: Glyn Johns
+  section: The Beatles
+  question: Who suggested that the Beatles play live on the roof of their Apple Studio building during
+    the Get Back sessions?
+  answer: Glyn Johns suggested it.
+  evidence: Johns says it was he who suggested the band play live on the rooftop of their Apple Studio
+    building in Savile Row, London; setting up the recording equipment for their last live performance.
+  verdict: accepted
+  note: "It's acceptable"
+- question_id: wp_1660633__s1__q0
+  article: The End (Beatles song)
+  section: Composition and recording
+  question: What inspired Ringo Starr's drumming on his solo in the Beatles' song "The End"?
+  answer: He copied part of Ron Bushy's drumming on Iron Butterfly's "In-A-Gadda-Da-Vida".
+  evidence: His solo on "The End" was recorded with twelve microphones around his drum kit; in his playing,
+    he said he copied part of Ron Bushy's drumming on the Iron Butterfly track "In-A-Gadda-Da-Vida".
+  verdict: accepted
+  note: ''
+- question_id: wp_2253826__s9__q0
+  article: I Saw Her Standing There
+  section: Tiffany version
+  question: Who produced Tiffany’s version of “I Saw Her Standing There”?
+  answer: George Tobin
+  evidence: It was released on MCA Records and was produced by George Tobin.
+  verdict: accepted
+  note: "Not about the beatles but it is on topic"
+- question_id: wp_24600__s1__q0
+  article: Pete Best
+  section: Early life
+  question: Why did Pete Best ask his mother to open the Casbah Coffee Club?
+  answer: He wanted somewhere his friends could meet and listen to popular music.
+  evidence: The idea for the club first came from Best, as he asked his mother for somewhere his friends
+    could meet and listen to the popular music of the day.
+  verdict: accepted
+  note: ''
+- question_id: wp_1119469__s5__q0
+  article: All You Need Is Love
+  section: Live broadcast
+  question: How did the Beatles combine the live performance of “All You Need Is Love” with the music
+    already recorded?
+  answer: They performed the song with the orchestra and studio guests, adding their performance over
+    a pre-recorded rhythm track.
+  evidence: The Beatles, accompanied by the orchestra and the studio guests, then performed the entire
+    song, overdubbing onto the pre-recorded rhythm track.
+  verdict: accepted
+  note: ''
+- question_id: wp_2258874__s2__q0
+  article: She's a Woman
+  section: Recording
+  question: What unusual instrument did Paul McCartney use instead of a lead guitar on the second verse
+    of "She's a Woman"?
+  answer: He played a Steinway Vertegrand tack piano, nicknamed "Mrs Mills".
+  evidence: McCartney played Studio Two's Steinway Vertegrand tack piano – dubbed "Mrs Mills" in reference
+    to the music hall pianist Gladys Mills – substituting it on the second verse in place of a lead guitar.
+  verdict: accepted
+  note: ''
+- question_id: wp_1468518__s1__q0
+  article: Her Majesty (song)
+  section: Background and recording
+  question: How did “Her Majesty” end up at the end of Abbey Road after Paul McCartney had asked for it
+    to be scrapped?
+  answer: The sound engineer put it after “The End” and added twenty seconds of leader tape between the
+    songs.
+  evidence: Therefore, he inserted it at the end of Abbey Road after "The End" and stitched twenty seconds'
+    worth of leader tape between the two songs.
+  verdict: accepted
+  note: ''
+- question_id: wp_6201901__s4__q0
+  article: Epiphone Casino
+  section: Notable users
+  question: Which Beatle is listed as a notable user of the Epiphone Casino?
+  answer: George Harrison
+  evidence: George Harrison
+  verdict: rejected
+  note: "Lennon y McCartney are also listed as Epiphone Casino players"
+- question_id: wp_326691__s4__q0
+  article: Billy Preston
+  section: Later work
+  question: What did Billy Preston do after hearing the Red Hot Chili Peppers’ “Warlocks” while he was
+    very ill?
+  answer: He got out of bed to record his part, then went back to bed.
+  evidence: Although very ill by this point, he jumped out of his bed after hearing a tape of the song
+    given to him by the band, recorded his part, and went back to bed.
+  verdict: rejected
+  note: "Not related to the beatles"
+- question_id: wp_576680__s2__q0
+  article: Helter Skelter (song)
+  section: Composition
+  question: How does the ending of the Beatles’ “Helter Skelter” unfold?
+  answer: The performance stops and starts again, fades out and back in, then fades out once more amid
+    a cacophony of sounds.
+  evidence: This is followed by a prolonged ending during which the performance stops, picks up again,
+    fades out, fades back in, and then fades out one final time amidst a cacophony of sounds.
+  verdict: accepted
+  note: ''
+- question_id: wp_2252172__s8__q0
+  article: I Need You (Beatles song)
+  section: Personnel
+  question: On the Beatles song “I Need You”, which instruments did George Harrison play?
+  answer: He played classical guitar and twelve-string lead guitar.
+  evidence: George Harrison – double-tracked lead vocal, classical guitar, twelve-string lead guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_155452__s3__q0
+  article: Hey Jude
+  section: Trident Studios recording
+  question: How did Paul McCartney try to get more energy from the orchestra on “Hey Jude”?
+  answer: He stood on the grand piano and conducted the musicians.
+  evidence: During the first few takes, McCartney was unhappy about the lack of energy and passion in
+    the orchestra's performance, so he stood up on the grand piano and started conducting the musicians
+    from there.
+  verdict: accepted
+  note: ''
+- question_id: wp_2253277__s4__q0
+  article: Every Little Thing (Beatles song)
+  section: Personnel
+  question: Who played the double-tracked lead guitar on the Beatles' “Every Little Thing”?
+  answer: George Harrison
+  evidence: George Harrison – double-tracked lead guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_2387468__s2__q0
+  article: Double tracking
+  section: Automatic double tracking
+  question: What was automatic double tracking used to do to a Beatles singer’s voice?
+  answer: It was used to give one singer a fuller sound.
+  evidence: The effect is used to give one singer a fuller sound.
+  verdict: accepted
+  note: ''
+- question_id: wp_1996707__s0__q0
+  article: Please Please Me (song)
+  section: Introduction
+  question: Who significantly influenced the final form of the Beatles’ song “Please Please Me”?
+  answer: Producer George Martin.
+  evidence: It is a John Lennon composition (credited to McCartney–Lennon), although its ultimate form
+    was significantly influenced by producer George Martin.
+  verdict: accepted
+  note: ''
+- question_id: wp_847078__s0__q0
+  article: Taxman
+  section: Introduction
+  question: Who played the Indian-influenced guitar solo on the Beatles’ song “Taxman”?
+  answer: Paul McCartney.
+  evidence: The recording includes an Indian-influenced guitar solo performed by Paul McCartney.
+  verdict: accepted
+  note: ''
+- question_id: wp_1056165__s8__q0
+  article: Lennon–McCartney
+  section: Effect on George Harrison
+  question: What did George Harrison contribute to the Beatles song “And I Love Her” without receiving
+    songwriting credit?
+  answer: He contributed the guitar riff.
+  evidence: McCartney acknowledged that Harrison made vital uncredited contributions to Lennon–McCartney
+    songs, such as the guitar riff in "And I Love Her".
+  verdict: accepted
+  note: ''
+- question_id: wp_74914__s17__q0
+  article: Beatles for Sale
+  section: Personnel
+  question: What unusual object did Ringo Starr play on Beatles for Sale, alongside drums and percussion?
+  answer: A packing case.
+  evidence: Ringo Starr – drums, tambourine, maracas, timpani, cowbell, packing case, bongos; lead vocals
+    on "Honey Don't"
+  verdict: accepted
+  note: ''
+- question_id: wp_7849389__s1__q0
+  article: Christmas Time (Is Here Again)
+  section: Background and composition
+  question: Which Beatles Christmas song was credited to all four members?
+  answer: “Christmas Time (Is Here Again)” was credited to all four Beatles.
+  evidence: The song is one of the Beatles' few releases credited to all four members, just as their earlier
+    1967 instrumental "Flying" had been.
+  verdict: accepted
+  note: ''
+- question_id: wp_143174__s7__q0
+  article: Strawberry Fields Forever
+  section: Final edit
+  question: How did Geoff Emerick join the two versions of “Strawberry Fields Forever” despite their different
+    keys and speeds?
+  answer: He sped up the first version and slowed down the second.
+  evidence: With only a pair of editing scissors, two tape machines and a vari-speed control, Emerick
+    compensated for the differences in key and speed by increasing the speed of the first version and
+    decreasing the speed of the second.
+  verdict: accepted
+  note: ''
+- question_id: wp_5627611__s1__q0
+  article: Kansas City (Leiber and Stoller song)
+  section: The Beatles' version
+  question: Where had the Beatles started performing “Kansas City” before they recorded it?
+  answer: They had started performing it in Hamburg.
+  evidence: a song they began performing in Hamburg during Spring 1961.
+  verdict: accepted
+  note: ''
+- question_id: wp_2252176__s6__q0
+  article: Another Girl
+  section: Personnel
+  question: On the Beatles song “Another Girl,” what instruments did Paul McCartney play, and how was
+    his lead vocal recorded?
+  answer: He played bass and electric lead guitar, and his lead vocal was double-tracked.
+  evidence: Paul McCartney – double-tracked lead vocal, bass guitar, electric lead guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_2246693__s0__q0
+  article: Piggies
+  section: Introduction
+  question: Who largely produced the Beatles’ song “Piggies,” and what instrument did he play on it?
+  answer: Chris Thomas largely produced it and played the harpsichord.
+  evidence: Although credited to George Martin, the recording was largely produced by Chris Thomas, who
+    also contributed the harpsichord part.
+  verdict: accepted
+  note: ''
+- question_id: wp_143172__s6__q0
+  article: I Am the Walrus
+  section: Personnel
+  question: What unusual instrument did Gordon Lewin play on the Beatles’ “I Am the Walrus”?
+  answer: He played contrabass clarinet.
+  evidence: Gordon Lewin – contrabass clarinet
+  verdict: accepted
+  note: ''
+- question_id: wp_1487897__s1__q0
+  article: Ludwig Drums
+  section: History
+  question: Why did Ringo Starr choose a Ludwig drum kit when he joined the Beatles?
+  answer: He liked its oyster pearl black color.
+  evidence: As it happens, Starr chose that brand upon joining the band simply because he liked the oyster
+    pearl black color of the drum kit he chose.
+  verdict: accepted
+  note: ''
+- question_id: wp_74934__s12__q0
+  article: Help!
+  section: Surround versions
+  question: How were the songs from the Help! film soundtrack prepared for the film’s 2007 DVD?
+  answer: They were mixed into 5.1 surround sound.
+  evidence: The songs included in the soundtrack of the film Help! (tracks 1–7) were mixed into 5.1 surround
+    sound for the film's 2007 DVD release.
+  verdict: accepted
+  note: "It's acceptable"
+- question_id: wp_2246663__s2__q0
+  article: Martha My Dear
+  section: Recording
+  question: Why was Paul McCartney urged to let George Martin play the piano solo on “Martha My Dear,”
+    and what did McCartney do?
+  answer: People thought the solo was beyond McCartney’s ability, but he persisted.
+  evidence: He was advised to have producer George Martin play the piano solo because it was believed
+    that the solo was beyond McCartney's competency, but McCartney persisted.
+  verdict: accepted
+  note: ''
+- question_id: wp_1329366__s3__q0
+  article: Here Comes the Sun
+  section: Recording
+  question: How did George Harrison give the electric guitar part on “Here Comes the Sun” its distinctive
+    sound?
+  answer: He ran the electric guitar through a Leslie speaker.
+  evidence: Harrison overdubbed an electric guitar run through a Leslie speaker on 6 August,
+  verdict: accepted
+  note: ''
+- question_id: wp_2248409__s1__q0
+  article: She's Leaving Home
+  section: Background
+  question: What inspired Paul McCartney to write “She's Leaving Home”?
+  answer: A Daily Mail story about 17-year-old runaway Melanie Coe.
+  evidence: McCartney was inspired to write the song after reading a Daily Mail article about Melanie
+    Coe, a 17-year-old runaway from Stamford Hill.
+  verdict: accepted
+  note: ''
+- question_id: wp_1339767__s0__q0
+  article: What Goes On (Beatles song)
+  section: Introduction
+  question: What makes “What Goes On” unusual among Beatles songs and tracks on Rubber Soul?
+  answer: It is the only Beatles song credited to Lennon–McCartney–Starkey and the only Rubber Soul track
+    with Ringo Starr on lead vocals.
+  evidence: It is the only song by the band credited to Lennon–McCartney–Starkey and the only song on
+    Rubber Soul that features Ringo Starr on lead vocals.
+  verdict: accepted
+  note: ''
+- question_id: wp_2246776__s0__q0
+  article: Cry Baby Cry
+  section: Introduction
+  question: What is the short coda at the end of the Beatles’ “Cry Baby Cry,” and where did it come from?
+  answer: It is a segment called “Can You Take Me Back,” written by Paul McCartney and taken from an outtake
+    from the “I Will” session.
+  evidence: The coda of the song is a short segment referred to as "Can You Take Me Back", written by
+    Paul McCartney, which was actually an outtake from the "I Will" session.
+  verdict: accepted
+  note: ''
+- question_id: wp_963078__s12__q0
+  article: From Me to You
+  section: Later versions
+  question: What was unusual about the version of “From Me to You” used in John Lewis’ 2008 Christmas
+    campaign?
+  answer: It was a slowed-down cover using only piano and vocals.
+  evidence: In November 2008, a slowed-down cover version using only piano and vocals became the first
+    Beatles song to be used in a British advertising campaign when it was used in John Lewis' Christmas
+    marketing.
+  verdict: accepted
+  note: "It is correct"
+- question_id: wp_2246698__s1__q0
+  article: Rocky Raccoon
+  section: Composition
+  question: Who played the honky-tonk piano on “Rocky Raccoon”?
+  answer: Producer George Martin played it.
+  evidence: The Old West-style honky-tonk piano was played by producer George Martin.
+  verdict: accepted
+  note: ''
+- question_id: wp_24600__s5__q0
+  article: Pete Best
+  section: Dismissal
+  question: Why did George Martin initially keep Ringo Starr from playing drums at the Beatles’ Abbey
+    Road session?
+  answer: Martin was unfamiliar with Starr and wanted to avoid the risk that his drumming would not be
+    up to par.
+  evidence: George Martin initially refused to let Starr play.
+  verdict: rejected
+  note: "Exceeds the evidence"
+- question_id: wp_1872314__s10__q0
+  article: Tomorrow Never Knows
+  section: In television and film
+  question: How did the TV sketch parody the seagull sounds in the Beatles song “Tomorrow Never Knows”?
+  answer: They used a bird squawking in the studio.
+  evidence: the song evokes the seagull sounds of "Tomorrow Never Knows" through the presence of a bird
+    squawking in the studio
+  verdict: rejected
+  note: "'the TV sketch' it doesn't mention which sketch"
+- question_id: wp_7849389__s4__q0
+  article: Christmas Time (Is Here Again)
+  section: Personnel
+  question: What did John Lennon contribute to “Christmas Time (Is Here Again)” besides singing?
+  answer: He played timpani.
+  evidence: John Lennon – double-tracked vocal, timpani
+  verdict: accepted
+  note: ''
+- question_id: wp_1209609__s8__q0
+  article: Love Me Do
+  section: Personnel
+  question: What did Ringo Starr play on the 1962 single version of “Love Me Do,” and what did he play
+    on the album and later singles?
+  answer: He played drums on the 1962 single and tambourine on the album and later singles.
+  evidence: Ringo Starr – drums (1962 single); tambourine (album and later singles)
+  verdict: accepted
+  note: ''
+- question_id: wp_65450__s18__q0
+  article: Sgt. Pepper's Lonely Hearts Club Band
+  section: '"Good Morning Good Morning"'
+  question: What inspired John Lennon to write the refrain of “Good Morning Good Morning”?
+  answer: A Kellogg’s Corn Flakes commercial jingle.
+  evidence: Lennon was inspired to write "Good Morning Good Morning" after watching a television commercial
+    for Kellogg's Corn Flakes, the jingle of which he adapted for the song's refrain.
+  verdict: accepted
+  note: ''
+- question_id: wp_2253635__s0__q0
+  article: I'm Happy Just to Dance with You
+  section: Introduction
+  question: Who sang lead on the Beatles' “I'm Happy Just to Dance with You”?
+  answer: George Harrison.
+  evidence: Lead vocals are by George Harrison, whose performance in the film marked the first mass media
+    depiction of Harrison singing lead.
+  verdict: accepted
+  note: ''
+- question_id: wp_2254919__s0__q0
+  article: The Inner Light (song)
+  section: Introduction
+  question: Where did George Harrison record the instrumental track for the Beatles song “The Inner Light”?
+  answer: He recorded it in Bombay.
+  evidence: Harrison recorded the instrumental track for "The Inner Light" in Bombay in January 1968,
+    during the sessions for his Wonderwall Music soundtrack album.
+  verdict: accepted
+  note: ''
+- question_id: wp_140547__s1__q0
+  article: Geoff Emerick
+  section: Early career at EMI
+  question: How old was Geoff Emerick when he started working as an assistant engineer?
+  answer: He was 16.
+  evidence: At age 16, he was employed as an assistant engineer.
+  verdict: accepted
+  note: ''
+- question_id: wp_2248397__s3__q0
+  article: Fixing a Hole
+  section: Musical structure
+  question: What change in the beat does Ringo Starr introduce during the introduction to “Fixing a Hole”?
+  answer: His hi-hat introduces a swing beat that continues for the rest of the song.
+  evidence: Ringo Starr's hi-hat in the final measure of this introduction introduces a swing beat that
+    stays for the remainder of the song.
+  verdict: accepted
+  note: ''
+- question_id: wp_129213__s4__q0
+  article: Neil Aspinall
+  section: Musical and film contributions
+  question: What instruments and vocal parts did Neil Aspinall contribute to the Beatles’ recordings?
+  answer: He played tamboura on "Within You Without You", harmonica on "Being for the Benefit of Mr. Kite!",
+    and percussion on "Magical Mystery Tour", and sang on the chorus of "Yellow Submarine".
+  evidence: He played a tamboura on "Within You Without You", harmonica on "Being for the Benefit of Mr.
+    Kite!", some percussion on "Magical Mystery Tour", and was among the many participants singing on
+    the chorus of "Yellow Submarine".
+  verdict: accepted
+  note: ''
+- question_id: wp_2258415__s3__q0
+  article: Yes It Is
+  section: Recording
+  question: How did the Beatles create the close harmonies on “Yes It Is”?
+  answer: Lennon, McCartney and Harrison sang together live in three-part harmony, following George Martin’s
+    suggestion to use a barbershop-quartet style.
+  evidence: Lennon, McCartney and Harrison recorded their vocal harmonies in three hours, singing live
+    together, following the suggestion of George Martin that they sing their three-part harmony in the
+    style of a barbershop quartet.
+  verdict: accepted
+  note: ''
+- question_id: wp_2090346__s0__q0
+  article: Sun King (song)
+  section: Introduction
+  question: Who sang the layered harmonies on the Beatles’ song “Sun King”?
+  answer: John Lennon, Paul McCartney and George Harrison.
+  evidence: Like other tracks on the album (notably "Because") the song features lush multi-tracked vocal
+    harmonies, provided by Lennon, Paul McCartney and George Harrison.
+  verdict: accepted
+  note: ''
+- question_id: wp_921672__s0__q0
+  article: While My Guitar Gently Weeps
+  section: Introduction
+  question: How did George Harrison bring Eric Clapton into the recording of “While My Guitar Gently Weeps,”
+    and what did Clapton add?
+  answer: Harrison invited Clapton to contribute, and Clapton overdubbed a lead guitar part.
+  evidence: Harrison countered by inviting his friend and occasional collaborator, Eric Clapton, to contribute
+    to the recording. Clapton overdubbed a lead guitar part, although he was not formally credited for
+    his contribution.
+  verdict: accepted
+  note: ''
+- question_id: wp_29812__s4__q0
+  article: The Beatles
+  section: Please Please Me and With the Beatles
+  question: Why did George Martin decide not to record the Beatles' Please Please Me album live at the
+    Cavern Club, and what did he do instead?
+  answer: He thought the Cavern Club's acoustics were inadequate, so he simulated a live album with minimal
+    production in one marathon session at Abbey Road.
+  evidence: Martin considered recording the LP live at The Cavern Club, but after deciding that the building's
+    acoustics were inadequate, he elected to simulate a "live" album with minimal production in "a single
+    marathon session at Abbey Road".
+  verdict: accepted
+  note: ''
+- question_id: wp_27212306__s0__q0
+  article: Phil McDonald
+  section: Introduction
+  question: How old was Phil McDonald when he joined Apple as a senior balance engineer?
+  answer: He was 25.
+  evidence: McDonald joined Apple as a senior balance engineer, at the age of 25.
+  verdict: accepted
+  note: "It's ok"
+- question_id: wp_2248421__s2__q0
+  article: Lovely Rita
+  section: Recording
+  question: Which musicians visited the Beatles during the Lovely Rita vocal session on 24 February 1967?
+  answer: Tony Hicks, David Crosby, Shawn Phillips, and the brother of Ravi Shankar.
+  evidence: The Beatles were visited in the studio that evening by Tony Hicks of the Hollies, American
+    musicians David Crosby and Shawn Phillips, and the brother of Ravi Shankar, Harrison's sitar teacher.
+  verdict: accepted
+  note: ''
+- question_id: wp_2248330__s0__q0
+  article: The Fool on the Hill
+  section: Introduction
+  question: What inspired Paul McCartney to write “The Fool on the Hill”?
+  answer: The Dutch design collective the Fool, and possibly Maharishi Mahesh Yogi.
+  evidence: McCartney said the idea for the song was inspired by the Dutch design collective the Fool,
+    who derived their name from the tarot card of the same name, and possibly by Maharishi Mahesh Yogi.
+  verdict: accepted
+  note: ''
+- question_id: wp_2290589__s2__q0
+  article: The Beatles' Movie Medley
+  section: Issue
+  question: What was on the original flip side of The Beatles' Movie Medley single?
+  answer: An interview with the Beatles about the making of A Hard Day's Night.
+  evidence: The original flip side was an interview with the Beatles about the making of the movie A Hard
+    Day's Night.
+  verdict: accepted
+  note: "It is correct"
+- question_id: wp_1451526__s0__q0
+  article: Within You Without You
+  section: Introduction
+  question: Who performed the Indian instruments on the Beatles’ “Within You Without You,” and were the
+    other Beatles involved in the recording?
+  answer: George Harrison and members of the Asian Music Circle performed it, and the other Beatles were
+    not involved in the recording.
+  evidence: Recorded in London without the other Beatles, it features Indian instrumentation such as sitar,
+    tambura, dilruba and tabla, and was performed by Harrison and members of the Asian Music Circle.
+  verdict: accepted
+  note: ''
+- question_id: wp_5837175__s8__q0
+  article: Denmark Street
+  section: Current occupants
+  question: What helped make Rickenbacker guitars more popular in Britain?
+  answer: Musicians noticed John Lennon playing one.
+  evidence: The company became the first British distributor of Rickenbacker guitars in 1962, which had
+    a surge in popularity after musicians noticed the Beatles' John Lennon playing one.
+  verdict: accepted
+  note: ''
+- question_id: wp_129194__s9__q0
+  article: Brian Epstein
+  section: Business dealings
+  question: What unusual pay arrangement did Brian Epstein offer the Beatles?
+  answer: He offered each of them a fixed wage of £50 a week for life.
+  evidence: Epstein once offered all four Beatles a fixed wage of £50 a week for life .
+  verdict: accepted
+  note: ''
+- question_id: wp_1209637__s5__q0
+  article: Can't Buy Me Love
+  section: Personnel
+  question: What guitars did George Harrison play on “Can't Buy Me Love”?
+  answer: He played double-tracked lead guitar and twelve-string guitar.
+  evidence: George Harrison – double-tracked lead guitar, twelve-string guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_3410788__s6__q0
+  article: Yellow Submarine (album)
+  section: Unreleased EP
+  question: What did the Beatles plan to include on a five-track Yellow Submarine EP instead of the film
+    score?
+  answer: They planned to include the then-unreleased “Across the Universe” as a bonus track.
+  evidence: As a result, the band decided to reissue Yellow Submarine as a five-track mono EP, without
+    the film score but including the then-unreleased "Across the Universe" as a bonus track.
+  verdict: accepted
+  note: "It's ok"
+- question_id: wp_1594546__s4__q0
+  article: Blackbird (Beatles song)
+  section: Live performances
+  question: Since which tour has Paul McCartney performed “Blackbird” on every concert tour?
+  answer: Since his 1975–76 world tour with Wings.
+  evidence: McCartney has performed "Blackbird" on every one of his concert tours.
+  verdict: rejected
+  note: "Exceeds the evidence"
+- question_id: wp_74961__s19__q0
+  article: Rubber Soul
+  section: '"Run for Your Life"'
+  question: What earlier song inspired John Lennon to write the Beatles' "Run for Your Life"?
+  answer: Elvis Presley's "Baby Let's Play House".
+  evidence: Lennon wrote "Run for Your Life" based on "Baby Let's Play House", which was one of Presley's
+    early singles on the Sun record label.
+  verdict: accepted
+  note: ''
+- question_id: wp_2082174__s2__q0
+  article: I Feel Fine
+  section: Structure
+  question: What inspired Ringo Starr's drum beat on most of the Beatles' song “I Feel Fine”?
+  answer: It was based on the “Latin” drumming in Ray Charles's hit “What'd I Say.”
+  evidence: Ringo Starr's R&B-influenced beat (based on the "Latin" drumming in Ray Charles's hit "What'd
+    I Say") featured through most of the song except for the bridge, which has a more conventional backbeat.
+  verdict: accepted
+  note: ''
+- question_id: wp_129213__s6__q0
+  article: Neil Aspinall
+  section: Apple Corps executive
+  question: What role did Neil Aspinall take on for The Beatles Anthology, and which two other non-Beatles
+    appeared in its new footage?
+  answer: Aspinall became executive producer, and George Martin and Derek Taylor were the other non-Beatles
+    seen in the new footage.
+  evidence: In the early 1990s, Aspinall became the executive producer for The Beatles Anthology; he,
+    producer George Martin, and press officer Derek Taylor are the only non-Beatles seen in new footage
+    for the documentary.
+  verdict: accepted
+  note: ''
+- question_id: wp_991659__s4__q0
+  article: Anthology 1
+  section: Personnel
+  question: What unusual instruments did George Harrison play on the Beatles’ “Free as a Bird”?
+  answer: He played ukulele and slide guitar.
+  evidence: George Harrison – harmony and backing vocals, lead guitar; ukulele and slide guitar on "Free
+    as a Bird", lead vocals on "Roll Over Beethoven", "Three Cool Cats", "The Sheik of Araby" and "You
+    Know What to Do"
+  verdict: accepted
+  note: ''
+- question_id: wp_1347003__s6__q0
+  article: And Your Bird Can Sing
+  section: Personnel
+  question: On “And Your Bird Can Sing,” what instruments did Paul McCartney play?
+  answer: He played bass and lead guitar.
+  evidence: Paul McCartney – harmony vocal, bass, lead guitar, handclaps
+  verdict: accepted
+  note: ''
+- question_id: wp_2253288__s4__q0
+  article: What You're Doing
+  section: Personnel
+  question: What did George Harrison play and sing on the Beatles’ “What You’re Doing”?
+  answer: He sang harmony and played twelve-string lead guitar.
+  evidence: George Harrison – harmony vocal, twelve-string lead guitar
+  verdict: accepted
+  note: ''
+- question_id: wp_29812__s18__q0
+  article: The Beatles
+  section: 2010s
+  question: Which Beatles music services began streaming the band's catalogue in December 2015?
+  answer: Spotify and Apple Music.
+  evidence: In December 2015, the Beatles released their catalogue for streaming on various streaming
+    music services including Spotify and Apple Music.
+  verdict: rejected
+  note: "Out of scope. Confusing question"
+- question_id: wp_926304__s0__q0
+  article: Abbey Road
+  section: Introduction
+  question: What unusual instruments and guitar setup feature prominently on the Beatles’ Abbey Road album?
+  answer: It prominently features a Moog synthesiser and guitar played through a Leslie speaker unit.
+  evidence: Abbey Road incorporates styles such as rock, pop, blues, and progressive rock, and makes prominent
+    use of the Moog synthesiser and guitar played through a Leslie speaker unit.
+  verdict: accepted
+  note: ''
+- question_id: wp_2248342__s0__q0
+  article: Flying (Beatles instrumental)
+  section: Introduction
+  question: Which Beatles song was credited to all four members of the band?
+  answer: “Flying” was credited to John Lennon, Paul McCartney, George Harrison and Ringo Starr.
+  evidence: 'It is one of the few songs credited to all four members of the band: John Lennon, Paul McCartney,
+    George Harrison and Ringo Starr.'
+  verdict: rejected
+  note: "It's not accurate"
+- question_id: wp_143178__s2__q0
+  article: Lucy in the Sky with Diamonds
+  section: Composition
+  question: How did Paul McCartney suggest John Lennon change his singing on “Lucy in the Sky with Diamonds”?
+  answer: McCartney suggested that Lennon sing the line more fluidly instead of as a broken phrase.
+  evidence: Session tapes from the initial 1 March 1967 recording of this song reveal Lennon originally
+    sang the line "Cellophane flowers of yellow and green" as a broken phrase, but McCartney suggested
+    that he sing it more fluidly to improve the song.
+  verdict: accepted
+  note: ''
+- question_id: wp_2248349__s9__q0
+  article: Blue Jay Way
+  section: Cover versions and cultural references
+  question: What unusual style did Lord Sitar use for his cover of the Beatles' “Blue Jay Way”?
+  answer: He recorded it in an Indian music style.
+  evidence: Lord Sitar included "Blue Jay Way" on his 1968 album of Indian music-style recordings, titled
+    Lord Sitar.
+  verdict: accepted
+  note: "It's acceptable"
+- question_id: wp_2246762__s0__q0
+  article: Sexy Sadie
+  section: Introduction
+  question: What prompted John Lennon to write “Sexy Sadie” while the Beatles were in India?
+  answer: The Maharishi Mahesh Yogi’s alleged sexual advance on actress Mia Farrow.
+  evidence: Lennon wrote the song during the Beatles' stay in India in response to the Maharishi Mahesh
+    Yogi's alleged sexual advance on actress Mia Farrow.
+  verdict: accepted
+  note: ''
+- question_id: wp_1481954__s0__q0
+  article: Maxwell's Silver Hammer
+  section: Introduction
+  question: What contrast gives the Beatles’ “Maxwell’s Silver Hammer” its unusual feel?
+  answer: Its dark lyrics are set to an upbeat sound.
+  evidence: The dark lyrics are disguised by an upbeat sound.
+  verdict: accepted
+  note: ''
+- question_id: wp_393592__s2__q0
+  article: Andy White (drummer)
+  section: The Beatles
+  question: What unusual instruments did Andy White and Ringo Starr play on the Beatles’ recording of
+    “P.S. I Love You”?
+  answer: White played bongos, and Starr played maracas.
+  evidence: '"P.S. I Love You" was also recorded during this session with White playing a "lightweight
+    cha-cha-chá beat" on bongos rather than drums and Starr playing maracas.'
+  verdict: accepted
+  note: ''
+- question_id: wp_1885347__s2__q0
+  article: The Ballad of John and Yoko
+  section: Recording
+  question: Why were George Harrison and Ringo Starr absent when John Lennon and Paul McCartney recorded
+    “The Ballad of John and Yoko”?
+  answer: Harrison was abroad, and Starr was filming The Magic Christian.
+  evidence: Lennon and McCartney recorded the song with producer George Martin at EMI's Abbey Road Studios
+    without their bandmates George Harrison, who was abroad, and Ringo Starr, who was filming The Magic
+    Christian.
+  verdict: accepted
+  note: ''
+- question_id: wp_576680__s3__q0
+  article: Helter Skelter (song)
+  section: Recording
+  question: What unusual sound did John Lennon add to the overdubs on the Beatles' "Helter Skelter," and
+    how did he make it?
+  answer: He made a "mouth sax" sound by blowing through a saxophone mouthpiece.
+  evidence: On 10 September, the band added overdubs which included a lead guitar part by Harrison, trumpet
+    played by Mal Evans, piano, further drums, and "mouth sax" created by Lennon blowing through a saxophone
+    mouthpiece.
+  verdict: accepted
+  note: ''
+- question_id: wp_470115__s2__q0
+  article: Norman Smith (music producer)
+  section: Career as producer and engineer
+  question: What did Norman Smith do when Pink Floyd drummer Nick Mason couldn't find the right drum part
+    for “Remember a Day”?
+  answer: Smith played the drum part himself.
+  evidence: Smith, however, knew what he wanted with the drums, so he played the part himself.
+  verdict: rejected
+  note: "Off topic"
+- question_id: wp_326691__s1__q0
+  article: Billy Preston
+  section: Early life
+  question: How did Billy Preston first meet the Beatles?
+  answer: He met them while performing in Hamburg with Little Richard's band.
+  evidence: In 1962, Preston joined Little Richard's band as organist, and while performing in Hamburg
+    he met the Beatles.
+  verdict: accepted
+  note: ''
+- question_id: wp_129211__s0__q0
+  article: Mal Evans
+  section: Introduction
+  question: What role did Mal Evans sometimes take on during Beatles recording sessions?
+  answer: He sometimes played as an extra musician.
+  evidence: As a constant presence, the Beatles occasionally used Evans as an extra musician; he has (often
+    uncredited) contributions on most Beatles albums from Rubber Soul (1965) onwards.
+  verdict: accepted
+  note: ''
+- question_id: wp_255133__s1__q0
+  article: Multitrack recording
+  section: Process
+  question: How did George Martin create recordings with many layers before an eight-track machine was
+    available for the Beatles' self-titled ninth album?
+  answer: He used multiple four-track machines.
+  evidence: The Beatles' producer George Martin used this technique extensively to achieve multiple-track
+    results, while still being limited to using only multiple four-track machines, until an eight-track
+    machine became available during the recording of the Beatles' self-titled ninth album.
+  verdict: accepted
+  note: ''
+- question_id: wp_29812__s17__q0
+  article: The Beatles
+  section: 2000s
+  question: How did George Martin and his son Giles create the soundtrack for the Beatles' Love stage
+    show?
+  answer: They remixed and blended 130 Beatles recordings.
+  evidence: As a soundtrack for Cirque du Soleil's Las Vegas Beatles stage revue, Love, George Martin
+    and his son Giles remixed and blended 130 of the band's recordings to create what Martin called "a
+    way of re-living the whole Beatles musical lifespan in a very condensed period".
+  verdict: accepted
+  note: ''
+- question_id: wp_1431855__s4__q0
+  article: I Me Mine
+  section: Recording
+  question: What joke did George Harrison make at the start of take 15 of “I Me Mine”?
+  answer: He pretended the Beatles were members of Dave Dee, Dozy, Beaky, Mick & Tich, joking about John
+    Lennon’s absence.
+  evidence: At the start of take 15, Harrison delivered a mock press statement in which he made a joking
+    reference to Lennon's absence by recasting the four Beatles as members of the British pop group Dave
+    Dee, Dozy, Beaky, Mick & Tich.
+  verdict: accepted
+  note: ''
+- question_id: wp_2254859__s2__q0
+  article: It's All Too Much
+  section: Composition and musical structure
+  question: What classical piece do the trumpets quote in the Beatles' song "It's All Too Much"?
+  answer: They play part of Jeremiah Clarke's "Prince of Denmark's March".
+  evidence: At another point on the recording, the trumpets play part of Jeremiah Clarke's "Prince of
+    Denmark's March".
+  verdict: accepted
+  note: ''
+- question_id: wp_65450__s17__q0
+  article: Sgt. Pepper's Lonely Hearts Club Band
+  section: '"Lovely Rita"'
+  question: What unusual instruments and sounds feature in the arrangement of “Lovely Rita”?
+  answer: It features four comb-and-paper kazoos, a piano solo by Martin, and a closing section with the
+    Beatles panting, groaning and making other vocal sounds.
+  evidence: The arrangement includes a quartet of comb-and-paper kazoos, a piano solo by Martin, and a
+    coda in which the Beatles indulge in panting, groaning and other vocalised sounds.
+  verdict: accepted
+  note: ''

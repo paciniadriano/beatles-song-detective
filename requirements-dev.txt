@@ -1,0 +1,20 @@
+# Local development dependencies (Windows, Python 3.12).
+# Everything needed to collect the corpus, build indexes and run the evaluation.
+# None of this ships to the Space.
+#
+#   py -3.12 -m venv .venv
+#   .venv\Scripts\activate
+#   pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+# --- embedding stage: the OpenAI embedding candidate (not used by the app) ---
+llama-index-embeddings-openai==0.7.0
+
+# --- corpus collection -------------------------------------------------------
+requests==2.32.5
+mwparserfromhell==0.7.2          # strips markup and templates from raw wikitext
+
+# --- tests --------------------------------------------------------------------
+pytest==9.1.1
+

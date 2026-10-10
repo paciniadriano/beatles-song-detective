@@ -1,0 +1,430 @@
+/* Beatles Song Detective. Every class is listed in src/app/ui.py.
+   Change the values below to restyle the page; the colours live in :root.
+   The look is Sgt. Pepper's: warm cream paper, brass-band colours, and a
+   rainbow border around the two boxes.
+
+   Gradio puts a component's class on two elements: its outer box
+   (div.block) and the content inside. Borders, padding and margins go on
+   `.block.beatle_rag_...`, or they are drawn twice.
+
+   Gradio drops a `background` written over several lines without a word:
+   keep every gradient on one line. */
+
+:root {
+  /* the palette */
+  --beatle_rag_magenta: #c2185b;
+  --beatle_rag_orange: #ef6c00;
+  --beatle_rag_yellow: #fbc02d;
+  --beatle_rag_teal: #00897b;
+  --beatle_rag_purple: #6a1b9a;
+  --beatle_rag_rainbow: linear-gradient(90deg, var(--beatle_rag_magenta), var(--beatle_rag_orange), var(--beatle_rag_yellow), var(--beatle_rag_teal));
+
+  /* what the page uses them for */
+  --beatle_rag_page: #fff6e8;
+  /* the cream paper behind everything */
+  --beatle_rag_text: #2b1a2f;
+  --beatle_rag_muted: #7d5a6e;
+  --beatle_rag_accent: var(--beatle_rag_magenta);
+  /* links, citation numbers */
+  --beatle_rag_soft: #ffe7c2;
+  /* the user's messages */
+  --beatle_rag_line: #f3d7b0;
+  /* thin borders inside the boxes */
+
+  /* Inter comes with the app (ui.font_face_css), so every visitor sees it.
+     The rest only cover letters it lacks (Greek, Cyrillic...). */
+  --beatle_rag_font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Gradio's own variables, so its components follow the page */
+  --font: var(--beatle_rag_font);
+  --font-mono: ui-monospace, Consolas, Menlo, monospace;
+  --body-background-fill: var(--beatle_rag_page);
+  --color-accent-soft: var(--beatle_rag_soft);
+  --border-color-accent: var(--beatle_rag_magenta);
+  --border-color-accent-subdued: var(--beatle_rag_magenta);
+  --table-row-focus: var(--beatle_rag_soft);
+}
+
+body,
+.gradio-container,
+.main,
+.wrap {
+  background: var(--beatle_rag_page) !important;
+}
+
+body {
+  color: var(--beatle_rag_text);
+  font-family: var(--beatle_rag_font);
+}
+
+.html-container {
+  padding: 0 !important;
+}
+
+/* --- layout -------------------------------------------------------------- */
+
+.beatle_rag_container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+  gap: 8px;
+}
+
+/* --- header -------------------------------------------------------------- */
+
+.block.beatle_rag_header {
+  text-align: center;
+  padding: 22px 0 14px !important;
+}
+
+/* The brass-band stripe under the subtitle. */
+.block.beatle_rag_header::after {
+  content: "";
+  display: block;
+  width: 260px;
+  height: 10px;
+  margin: 18px auto 0;
+  border-radius: 999px;
+  background: repeating-linear-gradient(90deg, var(--beatle_rag_magenta) 0 20%, var(--beatle_rag_orange) 20% 40%, var(--beatle_rag_yellow) 40% 60%, var(--beatle_rag_teal) 60% 80%, var(--beatle_rag_purple) 80% 100%);
+}
+
+.beatle_rag_title {
+  margin: 0 0 12px;
+}
+
+.beatle_rag_logo {
+  display: block;
+  width: 100%;
+  max-width: 480px !important;
+  height: auto;
+  margin: 0 auto !important;
+}
+
+.beatle_rag_subtitle {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  color: var(--beatle_rag_muted) !important;
+  max-width: 620px !important;
+  margin: 0 auto !important;
+}
+
+/* --- the two boxes: API key, and chat + question ------------------------- */
+
+/* A rainbow border with round corners: the white fill covers the padding
+   box, the rainbow shows only in the transparent border around it. */
+.beatle_rag_api_key_box,
+.beatle_rag_chat_box {
+  border: 4px solid transparent !important;
+  border-radius: 22px !important;
+  overflow: hidden;
+  background: linear-gradient(#fff, #fff) padding-box, var(--beatle_rag_rainbow) border-box !important;
+}
+
+/* Gradio puts the class on the group and on its inner div too: only the
+   outer one keeps the border. */
+.beatle_rag_api_key_box .beatle_rag_api_key_box,
+.beatle_rag_chat_box .beatle_rag_chat_box {
+  border: 0 !important;
+  border-radius: 18px !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+}
+
+.block.beatle_rag_chat,
+.block.beatle_rag_question,
+.beatle_rag_api_key,
+.beatle_rag_api_key_box>div,
+.beatle_rag_chat_box>div {
+  background: red !important;
+  background: #fff6e8 !important;
+  /* a Gradio group is grey between its parts */
+}
+
+.beatle_rag_api_key input,
+.beatle_rag_question textarea {
+  background: #f3f0e7 !important;
+  border: 2px solid var(--beatle_rag_line) !important;
+}
+
+.beatle_rag_chat_box {
+  margin-bottom: 12px;
+}
+
+/* --- API key ------------------------------------------------------------- */
+
+.beatle_rag_api_key_help,
+.beatle_rag_api_key_help p {
+  font-size: 0.85rem !important;
+  color: var(--beatle_rag_muted) !important;
+  font-weight: 500 !important;
+  margin-top: -3px !important;
+}
+
+.beatle_rag_api_key_help a {
+  color: var(--beatle_rag_accent) !important;
+}
+
+/* !important: inside a group Gradio resets the blocks' padding on some
+   screen widths, and the text then touches the rounded corner. */
+.block.beatle_rag_api_key_help {
+  padding: 0 20px 12px !important;
+  text-align: right;
+}
+
+/* --- conversation -------------------------------------------------------- */
+
+.block.beatle_rag_chat {
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: 1rem;
+  line-height: 1.6;
+  height: 400px !important;
+}
+
+.beatle_rag_chat .message.user {
+  background: var(--beatle_rag_soft) !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+}
+
+.beatle_rag_chat .message.bot {
+  background: #ffffff !important;
+  border: 2px solid var(--beatle_rag_line) !important;
+  border-radius: 18px !important;
+}
+
+/* "Searching Wikipedia…", with a record spinning beside it. */
+.beatle_rag_status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--beatle_rag_muted);
+  font-style: italic;
+}
+
+.beatle_rag_status::before {
+  content: "";
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(255, 255, 255, .28) 0 8%, transparent 8% 50%, rgba(255, 255, 255, .18) 50% 56%, transparent 56%), radial-gradient(circle, #fff 0 6%, var(--beatle_rag_magenta) 7% 30%, transparent 31%), repeating-radial-gradient(circle, #151515 0 1.5px, #2b2b2b 1.5px 2.5px);
+  animation: beatle_rag_spin 1.6s linear infinite;
+}
+
+@keyframes beatle_rag_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Visitors who asked their system for less motion get a still record. */
+@media (prefers-reduced-motion: reduce) {
+  .beatle_rag_status::before {
+    animation: none;
+  }
+}
+
+.beatle_rag_citation {
+  color: var(--beatle_rag_text) !important;
+  background: var(--beatle_rag_yellow);
+  border-radius: 999px;
+  padding: 0 5px;
+  font-weight: 700;
+  font-size: 0.8em;
+  text-decoration: none;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.beatle_rag_citation:hover {
+  background: var(--beatle_rag_orange);
+  color: #ffffff !important;
+}
+
+.beatle_rag_sources {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #fff3e0;
+  border-left: 5px solid var(--beatle_rag_teal);
+  border-radius: 0 14px 14px 0;
+  font-size: 0.875rem;
+}
+
+.beatle_rag_sources_title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  color: var(--beatle_rag_muted);
+  margin-bottom: 6px;
+}
+
+.beatle_rag_source {
+  margin: 2px 0;
+}
+
+.beatle_rag_source_number {
+  color: var(--beatle_rag_accent);
+  font-weight: 700;
+}
+
+.beatle_rag_source_link {
+  color: var(--beatle_rag_text);
+  font-weight: 600;
+}
+
+.beatle_rag_source_section {
+  color: var(--beatle_rag_muted);
+}
+
+/* A message from the app itself (no key, an error...): the whole bubble
+   turns pale yellow, instead of a box drawn inside it. */
+.beatle_rag_chat .message.bot:has(.beatle_rag_notice) {
+  background: #fff8e6 !important;
+  border-color: var(--beatle_rag_yellow) !important;
+}
+
+.beatle_rag_notice {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.beatle_rag_answer_meta {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--beatle_rag_muted);
+}
+
+/* --- question ------------------------------------------------------------ */
+
+.beatle_rag_input_row {
+  align-items: stretch;
+  border: 0 !important;
+  border-top: 2px dotted var(--beatle_rag_orange) !important;
+  /* the line between chat and question */
+  display: flex;
+  padding-right: 12px;
+}
+
+.beatle_rag_input_row .form {
+  border: 0 !important;
+}
+
+.beatle_rag_question {
+  border: 0 !important;
+  background: white !important;
+}
+
+.beatle_rag_question .wrap {
+  background: white !important;
+  overflow: hidden !important;
+}
+
+.beatle_rag_question textarea {
+  font-size: 1rem;
+  padding-left: 16px !important;
+}
+
+.beatle_rag_ask_button {
+  background: linear-gradient(90deg, var(--beatle_rag_magenta), var(--beatle_rag_orange)) !important;
+  border: 0 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  height: 40px !important;
+  align-self: center !important;
+  border-radius: 8px !important;
+  /* inside a group Gradio squares the corners */
+}
+
+.beatle_rag_ask_button:hover {
+  background: linear-gradient(90deg, var(--beatle_rag_purple), var(--beatle_rag_magenta)) !important;
+}
+
+/* --- example questions: pills, one colour each ---------------------------- */
+
+.beatle_rag_examples {
+  font-size: 0.9rem;
+}
+
+.beatle_rag_examples .label {
+  margin-bottom: 16px !important;
+}
+
+.beatle_rag_examples .gallery {
+  justify-content: space-between !important;
+}
+
+.beatle_rag_examples button {
+  background: rgb(254 248 231) !important;
+  border: 2px solid var(--beatle_rag_magenta) !important;
+  border-radius: 999px !important;
+  color: var(--beatle_rag_magenta) !important;
+  font-weight: 600 !important;
+  padding: 6px 14px !important;
+  width: 380px !important;
+}
+
+.beatle_rag_examples button:hover {
+  font-weight: 800 !important;
+}
+
+.beatle_rag_examples button:nth-of-type(4n+2) {
+  border-color: var(--beatle_rag_orange) !important;
+  color: var(--beatle_rag_orange) !important;
+}
+
+.beatle_rag_examples button:nth-of-type(4n+3) {
+  border-color: var(--beatle_rag_teal) !important;
+  color: var(--beatle_rag_teal) !important;
+}
+
+.beatle_rag_examples button:nth-of-type(4n+4) {
+  border-color: var(--beatle_rag_purple) !important;
+  color: var(--beatle_rag_purple) !important;
+}
+
+/* --- footer -------------------------------------------------------------- */
+
+.beatle_rag_footer {
+  text-align: center;
+  color: var(--beatle_rag_muted);
+}
+
+.beatle_rag_footer .prose * {
+  color: var(--beatle_rag_muted) !important;
+  font-size: 0.80rem;
+}
+
+.block.beatle_rag_footer {
+  border: 0 !important;
+  border-top: 2px dotted var(--beatle_rag_orange) !important;
+  /* same line as between chat and question */
+  border-radius: 0 !important;
+  padding-top: 16px !important;
+  margin-top: 8px !important;
+}
+
+.built-with {
+  display: none !important;
+}
+
+/* --- small screens ------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .beatle_rag_input_row {
+    padding: 0 0 12px !important;
+    /* the button drops below the box: keep it off the border */
+  }
+
+  .beatle_rag_ask_button {
+    margin: 0 12px !important;
+  }
+
+  .block.beatle_rag_header::after {
+    width: 200px;
+  }
+}

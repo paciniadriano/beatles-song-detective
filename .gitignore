@@ -1,0 +1,28 @@
+# Everything under data/ is derived and large. It lives in the Hugging Face
+# Dataset repo (versioned as corpus_v1), not in git.
+data/
+
+# Environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Secrets — the API key is pasted in the UI at runtime and never stored.
+.env
+*.key
+
+# Local tooling
+.vscode/
+.idea/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+*.log
+
+# OS leftovers
+.DS_Store
+Thumbs.db
+desktop.ini

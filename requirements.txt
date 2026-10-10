@@ -1,0 +1,20 @@
+# Runtime dependencies for the Hugging Face Space.
+# Python 3.12 (declared in the Space README front-matter as python_version: "3.12").
+#
+# Keep this file MINIMAL. Anything only needed to build the index or run the
+# evaluation belongs in requirements-dev.txt: every package here lengthens the
+# Space build and its cold start.
+#
+# These versions were verified to resolve together with no conflicts.
+
+llama-index-core==0.14.25
+llama-index-vector-stores-qdrant==0.10.3
+llama-index-embeddings-fastembed==0.7.0
+fastembed==0.8.1
+qdrant-client==1.19.1
+openai==3.19.0
+gradio==6.28.0
+huggingface-hub==1.32.0
+pydantic==2.12.5                 # gradio[mcp], which ZeroGPU installs, needs <= 2.12.5
+PyYAML==6.0.2
+tiktoken==0.14.0

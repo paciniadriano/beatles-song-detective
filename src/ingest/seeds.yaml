@@ -1,0 +1,454 @@
+# The corpus: every English Wikipedia article that enters it, grouped by the
+# doc_type it gets. Nothing is resolved from categories: what is listed here is
+# the whole corpus, so a later fetch can never add a page nobody chose.
+#
+# Titles must be Wikipedia's canonical titles, not redirects: fetch.py refuses a
+# redirect and prints the title to use instead. normalize.py looks each raw file
+# up here by that title, which is why doc_type and the rules below live in this
+# file and nowhere else.
+#
+# Songs are grouped by album, and the group is the song's Album header and
+# filter value. The album is the first of the album articles below on which the
+# Beatles released the song: the original albums as first issued (Magical
+# Mystery Tour as the 11-track LP), in track order. A song the Beatles first
+# released on an Anthology set, in 1995-96, takes that set. Anything else (a
+# single, an EP, a later compilation, never released) is Single/Outtake. Every
+# group except Single/Outtake must name an album article.
+#
+# An entry is either a plain title or a mapping with per-article rules:
+#   keep_sections  keep only the sections whose path names one of these phrases
+#                  (whole words, ignoring case). The text before the first
+#                  heading is the section "Introduction". Every phrase must
+#                  match at least one section, so a heading that changed or a
+#                  wrong article fails loudly. Covers use it to keep only the
+#                  sections about the Beatles' version.
+#   name           the name shown in the header when the article title differs
+#                  from the Beatles' own title for the song.
+
+# Songs are grouped by album: each group is the song's Album header and filter
+# value (the rule is at the top of this file).
+song:
+  Please Please Me:
+    - I Saw Her Standing There
+    - Misery (Beatles song)
+    - title: Anna (Go to Him)
+      keep_sections: [Introduction, Beatles]
+    - title: Chains (Cookies song)
+      keep_sections: [Introduction, Beatles]
+    - title: Boys (The Shirelles song)
+      keep_sections: [Introduction, Beatles]
+    - Ask Me Why
+    - Please Please Me (song)
+    - Love Me Do
+    - P.S. I Love You (Beatles song)
+    - title: Baby It's You
+      keep_sections: [Introduction, Beatles]
+    - Do You Want to Know a Secret
+    - title: A Taste of Honey (song)
+      keep_sections: [Introduction, Beatles]
+    - There's a Place
+    - title: Twist and Shout
+      keep_sections: [Introduction, Beatles]
+
+  With the Beatles:
+    - It Won't Be Long
+    - All I've Got to Do
+    - All My Loving
+    - Don't Bother Me
+    - Little Child
+    - title: Till There Was You
+      keep_sections: [Introduction, Beatles]
+    - title: Please Mr. Postman
+      keep_sections: [Introduction, Beatles]
+    - title: Roll Over Beethoven
+      keep_sections: [Introduction, Beatles]
+    - Hold Me Tight
+    - title: You've Really Got a Hold on Me
+      name: You Really Got a Hold on Me
+      keep_sections: [Introduction, Beatles]
+    - I Wanna Be Your Man
+    - title: Devil in His Heart
+      name: Devil in Her Heart
+      keep_sections: [Introduction, Beatles]
+    - Not a Second Time
+    - title: Money (That's What I Want)
+      keep_sections: [Introduction, Beatles]
+
+  A Hard Day's Night:
+    - A Hard Day's Night (song)
+    - I Should Have Known Better
+    - If I Fell
+    - I'm Happy Just to Dance with You
+    - And I Love Her
+    - Tell Me Why (Beatles song)
+    - Can't Buy Me Love
+    - Any Time at All
+    - I'll Cry Instead
+    - Things We Said Today
+    - When I Get Home
+    - You Can't Do That
+    - I'll Be Back (song)
+
+  Beatles for Sale:
+    - No Reply (song)
+    - I'm a Loser
+    - Baby's in Black
+    - title: Rock and Roll Music (song)
+      keep_sections: [Introduction, Beatles]
+    - I'll Follow the Sun
+    - title: Mr. Moonlight (song)
+      keep_sections: [Introduction, Beatles]
+    - title: Kansas City (Leiber and Stoller song)
+      keep_sections: [Introduction, Beatles]
+    - Eight Days a Week
+    - title: Words of Love
+      keep_sections: [Introduction, Beatles]
+    - title: Honey Don't
+      keep_sections: [Introduction, Beatles]
+    - Every Little Thing (Beatles song)
+    - I Don't Want to Spoil the Party
+    - What You're Doing
+    - title: Everybody's Trying to Be My Baby
+      keep_sections: [Introduction, Beatles]
+
+  Help!:
+    - Help! (song)
+    - The Night Before (song)
+    - You've Got to Hide Your Love Away
+    - I Need You (Beatles song)
+    - Another Girl
+    - You're Going to Lose That Girl
+    - Ticket to Ride (song)
+    - title: Act Naturally
+      keep_sections: [Introduction, Beatles]
+    - It's Only Love
+    - You Like Me Too Much
+    - Tell Me What You See
+    - I've Just Seen a Face
+    - Yesterday (song)
+    - title: Dizzy, Miss Lizzy
+      name: Dizzy Miss Lizzy
+      keep_sections: [Introduction, Beatles]
+
+  Rubber Soul:
+    - Drive My Car (song)
+    - Norwegian Wood (This Bird Has Flown)
+    - You Won't See Me
+    - Nowhere Man (song)
+    - Think for Yourself
+    - The Word (song)
+    - Michelle (song)
+    - What Goes On (Beatles song)
+    - Girl (Beatles song)
+    - I'm Looking Through You
+    - In My Life
+    - Wait (Beatles song)
+    - If I Needed Someone
+    - Run for Your Life (Beatles song)
+
+  Revolver:
+    - Taxman
+    - Eleanor Rigby
+    - I'm Only Sleeping
+    - Love You To
+    - Here, There and Everywhere
+    - Yellow Submarine (song)
+    - She Said She Said
+    - Good Day Sunshine
+    - And Your Bird Can Sing
+    - For No One
+    - Doctor Robert
+    - I Want to Tell You
+    - Got to Get You into My Life
+    - Tomorrow Never Knows
+
+  Sgt. Pepper's Lonely Hearts Club Band:
+    - Sgt. Pepper's Lonely Hearts Club Band (song)
+    - With a Little Help from My Friends
+    - Lucy in the Sky with Diamonds
+    - Getting Better
+    - Fixing a Hole
+    - She's Leaving Home
+    - Being for the Benefit of Mr. Kite!
+    - Within You Without You
+    - When I'm Sixty-Four
+    - Lovely Rita
+    - Good Morning Good Morning
+    - A Day in the Life
+
+  Magical Mystery Tour:
+    - Magical Mystery Tour (song)
+    - The Fool on the Hill
+    - Flying (Beatles instrumental)
+    - Blue Jay Way
+    - Your Mother Should Know
+    - I Am the Walrus
+    - Hello, Goodbye
+    - Strawberry Fields Forever
+    - Penny Lane
+    - Baby, You're a Rich Man
+    - All You Need Is Love
+
+  The Beatles:
+    - Back in the U.S.S.R.
+    - Dear Prudence
+    - Glass Onion (song)
+    - Ob-La-Di, Ob-La-Da
+    - Wild Honey Pie
+    - The Continuing Story of Bungalow Bill
+    - While My Guitar Gently Weeps
+    - Happiness Is a Warm Gun
+    - Martha My Dear
+    - I'm So Tired
+    - Blackbird (Beatles song)
+    - Piggies
+    - Rocky Raccoon
+    - Don't Pass Me By
+    - Why Don't We Do It in the Road?
+    - I Will
+    - Julia (Beatles song)
+    - Birthday (Beatles song)
+    - Yer Blues
+    - Mother Nature's Son
+    - Everybody's Got Something to Hide Except Me and My Monkey
+    - Sexy Sadie
+    - Helter Skelter (song)
+    - Long, Long, Long
+    - Revolution (Beatles song)
+    - Honey Pie
+    - Savoy Truffle
+    - Cry Baby Cry
+    - Revolution 9
+    - Good Night (Beatles song)
+
+  Yellow Submarine:
+    - Only a Northern Song
+    - All Together Now (Beatles song)
+    - Hey Bulldog
+    - It's All Too Much
+
+  Abbey Road:
+    - Come Together
+    - Something (Beatles song)
+    - Maxwell's Silver Hammer
+    - Oh! Darling
+    - Octopus's Garden
+    - I Want You (She's So Heavy)
+    - Here Comes the Sun
+    - Because (Beatles song)
+    - You Never Give Me Your Money
+    - Sun King (song)
+    - Mean Mr. Mustard
+    - Polythene Pam
+    - She Came In Through the Bathroom Window
+    - Golden Slumbers
+    - Carry That Weight
+    - The End (Beatles song)
+    - Her Majesty (song)
+
+  Let It Be:
+    - Two of Us (Beatles song)
+    - Dig a Pony
+    - Across the Universe
+    - I Me Mine
+    - Dig It (Beatles song)
+    - Let It Be (song)
+    - title: Maggie May (folk song)
+      name: Maggie Mae
+      keep_sections: [Introduction, Beatles]
+    - I've Got a Feeling
+    - One After 909
+    - The Long and Winding Road
+    - For You Blue
+    - Get Back
+
+  Anthology 1:
+    - Free as a Bird
+    - You'll Be Mine (Beatles song)
+    - Like Dreamers Do
+    - Hello Little Girl
+    - You Know What to Do
+
+  Anthology 2:
+    - Real Love (Beatles song)
+    - If You've Got Trouble
+    - That Means a Lot
+    - 12-Bar Original
+
+  Anthology 3:
+    - Not Guilty (song)
+    - What's the New Mary Jane
+    - Step Inside Love
+
+  Single/Outtake:
+    - title: Bad Boy (Larry Williams song)
+      keep_sections: [Introduction, Beatles]
+    - Bad to Me
+    - Christmas Time (Is Here Again)
+    - Day Tripper
+    - Don't Let Me Down (Beatles song)
+    - From Me to You
+    - Hey Jude
+    - I Call Your Name
+    - I Feel Fine
+    - I Want to Hold Your Hand
+    - I'll Be on My Way
+    - I'll Get You
+    - I'm Down
+    - Komm, gib mir deine Hand / Sie liebt dich
+    - Lady Madonna
+    - title: Long Tall Sally
+      keep_sections: [Introduction, Beatles]
+    - Love of the Loved
+    - Madman (Beatles song)
+    - title: Matchbox (song)
+      keep_sections: [Introduction, Beatles]
+    - Now and Then (Beatles song)
+    - Old Brown Shoe
+    - Paperback Writer
+    - Rain (Beatles song)
+    - She Loves You
+    - She's a Woman
+    - title: Slow Down (Larry Williams song)
+      keep_sections: [Introduction, Beatles]
+    - Sour Milk Sea
+    - Thank You Girl
+    - The Ballad of John and Yoko
+    - The Beatles' Movie Medley
+    - The Inner Light (song)
+    - This Boy
+    - Watching Rainbows
+    - We Can Work It Out
+    - Yes It Is
+    - You Know My Name (Look Up the Number)
+
+album:
+  - Please Please Me
+  - With the Beatles
+  - A Hard Day's Night (album)
+  - Beatles for Sale
+  - Help!
+  - Rubber Soul
+  - Revolver (Beatles album)
+  - Sgt. Pepper's Lonely Hearts Club Band
+  - Magical Mystery Tour
+  - The Beatles (album)
+  - Yellow Submarine (album)
+  - Abbey Road
+  - Let It Be (album)
+  - Let It Be... Naked
+  - Anthology 1
+  - Anthology 2
+  - Anthology 3
+
+# --- the band, the control room and the session players -----------------------
+# The four Beatles are kept to their musical sections: personal material sits
+# inside their chronological sections, so dropping headings would not catch it.
+person:
+  - title: John Lennon
+    keep_sections: [The Quarrymen to the Beatles, Musicianship, Writing]
+  - title: Paul McCartney
+    keep_sections: [The Quarrymen, The Beatles, Musicianship]
+  - title: George Harrison
+    keep_sections: [The Beatles, Musicianship]
+  - title: Ringo Starr
+    keep_sections: [First bands, Career > The Beatles, Artistry]
+  - Pete Best
+  - Stuart Sutcliffe
+  - Jimmie Nicol
+  - Andy White (drummer)
+  - George Martin
+  - Ron Richards (producer)
+  - Geoff Emerick
+  - Norman Smith (music producer)
+  - Ken Scott (record producer)
+  - Chris Thomas (music producer)
+  - Glyn Johns
+  - Phil Spector
+  - Ken Townsend
+  - Alan Parsons
+  - Richard Lush (sound engineer)
+  - Phil McDonald
+  - Mal Evans
+  - Neil Aspinall
+  - Brian Epstein
+  - Billy Preston
+  - Alan Civil
+  - Sidney Sax
+
+# --- where it was recorded ----------------------------------------------------
+studio:
+  - Abbey Road Studios
+  - Trident Studios
+  - Olympic Studios
+  - Denmark Street          # Regent Sound Studios has no article of its own
+  - De Lane Lea Studios
+  - Twickenham Film Studios
+  - 3 Savile Row
+
+# --- how it was recorded: processes and effects -------------------------------
+technique:
+  - Double tracking
+  - Automatic double tracking
+  - Pitch control
+  - Tape loop
+  - Backmasking
+  - Musique concrète
+  - Overdubbing
+  - Multitrack recording
+  - Microphone practice
+  - Flanging
+  - Phaser (effect)
+  - Delay (audio effect)
+  - Dynamic range compression
+  - Distortion (music)
+
+# --- what they played and recorded it on: devices -----------------------------
+equipment:
+  - Mellotron
+  - Leslie speaker
+  - Hammond organ
+  - Pump organ
+  - Sitar
+  - Tanpura
+  - Moog synthesizer
+  - Epiphone Casino
+  - Rickenbacker 325
+  - Rickenbacker 360/12
+  - Rickenbacker 4001
+  - Höfner 500/1
+  - Fender Bass VI
+  - Gibson J-160E
+  - Vox AC30
+  - Ludwig Drums
+  - Wah-wah pedal
+  - DI unit
+  - EMI TG12345
+  - EMI REDD
+
+# --- the articles that span the catalogue, and the band's key events ----------
+overview:
+  - Recording practices of the Beatles
+  - Lennon–McCartney
+  - The Beatles
+  - title: The Beatles' recording sessions
+    # Mostly a session log. Kept: the narrated sections on the early
+    # recordings, which no other article covers.
+    keep_sections:
+      - Introduction
+      - Phillips' Sound Recording Services
+      - The Quarrymen Demos
+      - Early Beatles Homemade Recordings
+      - 15 October 1960
+      - 22–24 June 1961
+      - 24 May 1962
+      - 6 June 1962
+      - 4 September 1962
+      - 11 September 1962
+  - The Beatles in Hamburg
+  - The Beatles' Decca audition
+  - The Beatles in India
+  - The Beatles' rooftop concert
+  - Let It Be (1970 film)
+  - "The Beatles: Get Back"
+  - Paul is dead

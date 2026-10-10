@@ -1,0 +1,297 @@
+# Beatles Song Detective — single source of truth for every constant.
+#
+# Rule: if a number or a name appears in the code instead of here, that is a bug.
+# Every eval run records the settings that define it in eval/experiments.csv.
+
+project:
+  corpus_version: corpus_v1
+  # Fixed namespace for deterministic chunk UUIDs. NEVER change it: changing it
+  # renumbers every point in every collection. Qdrant rejects non-UUID point ids.
+  uuid_namespace: "6f1b7c2e-0000-4000-8000-000000000000"
+
+paths:                          # relative; always resolved with pathlib
+  raw: data/raw/wikipedia         # one untouched API response per page
+  docs: data/docs
+  chunks: data/chunks
+  qdrant_experiments: data/qdrant_experiments   # all trial collections
+  qdrant_store: data/qdrant_store               # only the winner — this ships
+  models: data/models                            # fastembed cache
+  tiktoken_cache: data/tiktoken_cache            # TIKTOKEN_CACHE_DIR
+
+wikipedia:
+  # fetch.py fills in the address from WIKIPEDIA_CONTACT_EMAIL (.env); only
+  # fetching needs it.
+  user_agent: "BeatlesRAG/1.0 (${WIKIPEDIA_CONTACT_EMAIL})"
+  sleep_seconds: 0.2
+  # Every list of headings below is matched the same way: a phrase counts when
+  # it appears in the heading as whole words, case-insensitively ("notes"
+  # matches "Notes and references", not "Denotes"; "musician" does not match
+  # "Musicianship"). "(s)" or "(es)" at the end of a word makes that ending
+  # optional: "origin(s)" matches "Origin" and "Origins". Irregular plurals are
+  # listed in full ("documentary", "documentaries"). Any other parenthesis is
+  # refused when the config loads.
+  #
+  # Scholarly apparatus and lists, dropped with everything under them unless
+  # the heading also names an in-scope topic ("Cultural references" is media,
+  # so it stays; "Charts and certifications" is only release, so it goes).
+  drop_sections: [references, notes, footnotes, citations, sources, bibliography,
+                  external links, see also, further reading, charts, certifications,
+                  track listing(s), discography, filmography, other artists]
+  # Personal data about real people the app has no reason to surface: always
+  # dropped, with everything under them.
+  private_sections: [personal life, family, relationships, ancestry, death, murder,
+                     illness, disability, sexual orientation]
+
+# The topics of a section, for filtering and for choosing which sections get
+# an evaluation question. A section gets every topic whose phrases appear in
+# its heading (matched as above), so "Recording and release" is both recording
+# and release, and no order between topics matters. A heading that is exactly
+# one of `exact_titles` (ignoring case) gets that topic only. A heading with no
+# topic of its own takes the topics of its nearest ancestor that has some
+# ("Recording > Take 7" is recording); with none anywhere, it is `fallback`.
+# The text before the first heading is "introduction".
+#
+# "influences" (what shaped a song) is writing and "influence" (what it shaped)
+# is reception, so neither may be written "influence(s)".
+topics:
+  exact_titles:
+    Music: writing              # not a keyword: it would also catch "Music video"
+    The song: writing
+    Process: recording
+  keywords:
+    # How a song came to be: background, inspiration, authorship, lyrics and
+    # their meaning, and its musical make-up.
+    writing: [background, origin(s), inspiration, influences, composition(s),
+              songwriting, writing, written, lyric(s), meaning, interpretation(s),
+              authorship, dispute(s), musical structure, structure,
+              musical characteristics, musical form, melody, harmony,
+              music and lyrics, genre(s), theme(s), concept]
+    # How it was recorded: sessions, production, studio techniques, demos and
+    # outtakes, and the Beatles' own version inside another artist's article.
+    recording: [recording(s), recorded, production, session(s), mixing, mix(es),
+                overdub(s), overdubbing, rehearsal(s), demo(s), basic track,
+                outtake(s), unreleased, take(s), studio(s), beatles version,
+                "beatles' version", beatles rendition, "beatles' rendition",
+                use by the beatles]
+    # Who played, sang or engineered what: credit lists.
+    personnel: [personnel, credits, musician(s), performers, line-up, lineup,
+                band members, notable players]
+    # How a musician plays: instruments, style, technique.
+    musicianship: [musicianship, artistry, playing style, drumming style, guitar style,
+                   vocal style, guitar work, instruments, instrumentation, equipment,
+                   sitar]
+    live_performance: [live performance(s), live rendition(s), live version(s),
+                       concert(s), tour(s), touring]
+    # A song or album on screen, on its sleeve, and in popular culture.
+    media: [music video(s), promotional film(s), promotional clip(s), film(s),
+            film clip, television, documentary, documentaries, artwork, cover art,
+            cover design, album cover, front cover, back cover, packaging, sleeve,
+            crossing, popular culture, cultural references, media references,
+            in media]
+    biography: [early life, early years, career, after the beatles, later years,
+                later life, later career]
+    # Out of scope (below): chart and opinion material the project does not answer.
+    release: [release(s), single(s), chart(s), chart performance, certification(s),
+              commercial performance, sales, discography, track listing(s), formats,
+              reissue(s), re-release, publishing, promotion]
+    reception: [reception, review(s), legacy, aftermath, influence, retrospective,
+                assessment(s), accolade(s), award(s), recognition, rankings, impact,
+                response(s), homages]
+    cover_versions: [cover version(s), covers, other version(s), alternate version,
+                     alternative mix(es), remix(es)]
+  fallback: general             # no topic in the heading or its ancestors
+  # Kept in the index, but a section whose topics are all out of scope gets no
+  # evaluation question ("Recording and release" still gets one).
+  out_of_scope: [release, reception, cover_versions]
+
+audit:
+  # What audit.py flags for a person to look at; nothing is dropped by them.
+  short_document_max_tokens: 500   # a document this short may be the wrong article
+  short_section_max_tokens: 50     # sections this short are reported, not merged
+
+chunking:
+  tokenizer: cl100k_base        # single reference for measuring sizes
+  # Header fields per doc_type. They become the metadata of each LlamaIndex
+  # Document, and LlamaIndex prepends that metadata to the text it embeds:
+  # that IS the header, with no custom code. A uniform header makes no sense
+  # for a guitar amplifier article. Every listed field must be present and
+  # non-empty. The article-unit (blind) strategy drops `Section`, because one
+  # blind chunk can span several sections.
+  header_fields:
+    song:      [Song, Album, Section]
+    album:     [Album, Section]     # no Year: the infobox has no reliable one
+    person:    [Person, Section]
+    studio:    [Studio, Section]
+    equipment: [Equipment, Section]
+    technique: [Technique, Section]
+    overview:  [Article, Section]
+  # Every strategy runs the SAME stock LlamaIndex SentenceSplitter. Only two
+  # things change: `unit` (what one LlamaIndex Document is) and the size.
+  # The splitter never cuts across two Documents, so:
+  #   unit: article = one Document per article; chunks may span sections.
+  #                   The naive baseline, as taught in the course.
+  #   unit: section = one Document per section; no chunk mixes sections.
+  # The first four arms each answer one question the eval can resolve; the
+  # section ones share a 12.5% overlap, so they differ in size only. The
+  # overlap-0 arms came later, as follow-ups.
+  strategies:
+    - {id: blind_t512_o64,     unit: article, size: 512,  overlap: 64}   # do sections help?
+    - {id: section_t256_o32,   unit: section, size: 256,  overlap: 32}   # splits about half the sections
+    - {id: section_t256_o0,    unit: section, size: 256,  overlap: 0}    # 256 without overlap: tied with o32, so kept
+    - {id: section_t512_o0,    unit: section, size: 512,  overlap: 0}    # 512 without overlap: tied with o64, so kept
+    - {id: section_t512_o64,   unit: section, size: 512,  overlap: 64}   # whole section for most
+    - {id: section_t1024_o128, unit: section, size: 1024, overlap: 128}  # almost always one chunk per section
+  active: section_t256_o0       # chosen at the top_k stage, at equal context
+
+embeddings:
+  active: nomic
+  # A tie goes to nomic: it runs on the Space's CPU, while the OpenAI model
+  # would embed every query with the key the user pastes.
+  candidates:
+    nomic:
+      provider: fastembed
+      model: nomic-ai/nomic-embed-text-v1.5
+      # fastembed does NOT add these. The wrapper class applies them, and it is
+      # the only place in the codebase that may do so.
+      query_prefix: "search_query: "
+      doc_prefix: "search_document: "
+    openai:
+      provider: openai
+      model: text-embedding-3-small
+
+retrieval:
+  # Collection name = {corpus_version}__{strategy_id}__{embed_model}
+  mode: hybrid                  # hybrid | dense | sparse
+  sparse_model: Qdrant/bm25
+  # Candidate pools. They must be at least the largest eval.k_values entry, or
+  # hit@k for that k is silently capped.
+  similarity_top_k: 30          # dense branch, before fusion
+  sparse_top_k: 30              # sparse branch, before fusion
+  hybrid_top_k: 30              # after fusion; the reranker reads the first top_n
+  alpha: 0.5                    # 0 = sparse only, 1 = dense only
+  final_top_k: 8                # chunks the app sends the LLM, after fusion and
+                                # max_per_section. Chosen at the top_k stage.
+  max_per_section: 2            # stops overlapping chunks filling the top-k;
+                                # null = no cap
+
+reranking:
+  # A cross-encoder reads the question with each candidate (header + text) and
+  # reorders them, before max_per_section and final_top_k. Local (fastembed),
+  # so it never uses the user's key.
+  active: null                  # null = no reranker: it tied in the reranker stage
+  top_n: 20                     # candidates it reorders; the rest keep their order
+  candidates:
+    minilm: Xenova/ms-marco-MiniLM-L-6-v2
+    jina_turbo: jinaai/jina-reranker-v1-turbo-en
+
+llm:
+  base_url: null                # null = OpenAI. Set it to point at any
+                                # OpenAI-compatible endpoint (e.g. Ollama).
+  model: gpt-6-luna
+  api_key_env: OPENAI_API_KEY   # local runs only; the Space takes it from the UI
+  extra_params:                 # provider-specific; passed straight through
+    reasoning_effort: none      # required for tool calling on Chat Completions
+    temperature: 0
+  max_output_tokens: 700
+  max_steps: 1                  # most searches per question; 2 = may retry once (max_steps stage)
+  force_first_tool: true
+  max_question_chars: 500
+  history_turns: 3              # earlier questions and answers, without their
+                                # sources: enough to rewrite a follow-up
+  prompt_path: src/rag/prompt.md
+
+# USD per 1M tokens, per model: input and output from OpenAI's pricing page on
+# 2026-09-26, cached input from OpenRouter's page on 2026-09-30. Used for the
+# cost shown under each answer and printed after a run. Every model named
+# above needs an entry.
+model_prices:
+  gpt-6-luna: {input: 0.10, cached_input: 0.01, output: 0.50}
+
+eval:
+  split_seed: 42
+  dev_ratio: 0.7
+  # hit@k is measured on what search() returns (max_per_section applied), so
+  # each k answers "would the evidence be there if the app sent k chunks?".
+  # The one equal to retrieval.final_top_k decides; 20 is not a value the app
+  # would use, but a gap between hit@20 and hit@8 is what a reranker could
+  # recover.
+  k_values: [1, 3, 5, 7, 8, 10, 20]
+  runs_output: eval/runs        # one folder per run, with per_question.jsonl
+  experiments_output: eval/experiments.csv  # one row per run, every run
+  min_meaningful_gap_points: 2.0  # tie rule for every comparison (chunking,
+                                # embedding, reranker, alpha, top-k, max_steps):
+                                # a gap must also beat this. A
+                                # smaller win may be real, but it is too small
+                                # to justify a less simple configuration.
+
+  # The retrieval pool (src/eval/generate.py): ONE question per eligible
+  # section, so every eligible section is covered by construction rather than
+  # by a draw. Checked by validate_candidate() only; a person audits a random
+  # sample instead of reviewing every question. Songs are most of the pool, on
+  # purpose: they are what users ask about. Results are reported per doc_type
+  # as well as overall.
+  generate:
+    model: gpt-6-luna
+    max_output_tokens: 700      # its own limit: the app's answer length must
+                                # not be able to truncate a generated question
+    output: eval/pool/eval_v1.jsonl
+    pilot_output: eval/pool/pilot.jsonl   # where --limit N writes, so a trial
+                                          # run never overwrites the pool
+    # In articles whose subject is not the Beatles, a section must name the band
+    # or one of them to get a question: otherwise it is the history of an
+    # instrument, a studio or a producer's other work, which no user of this app
+    # asks. Case-sensitive, so "Starr" does not match "starring"; "Beatle" also
+    # matches "Beatles" and "former Beatle".
+    mention_required_for_doc_types: [person, studio, equipment, technique]
+    mention_terms: [Beatle, Lennon, McCartney, Harrison, Ringo, Starr]
+
+  # The random sample of the pool that a person audits by hand
+  # (src/eval/audit_sample.py). Its rejected share, with its 95% margin, is what
+  # results.md reports.
+  audit_sample:
+    size: 100
+    output: eval/pool/audit_eval_v1.yaml
+
+  # The generation set (src/eval/run_generation.py): hand-curated questions
+  # answered by the whole agent, graded by hand. The set is frozen as
+  # set_v1.yaml, so a run never mixes versions.
+  generation:
+    questions: eval/generation/set_v1.yaml
+    runs_output: eval/generation/runs     # one folder per run, answers.yaml inside
+    closed_book_prompt_path: src/eval/closed_book_prompt.md
+
+space:
+  repo_id: adrianopacini/beatles-song-detective  # where src/app/deploy.py uploads the code
+  # The Hugging Face dataset repo holding qdrant_store/, named by this
+  # environment variable (a Space variable, not a secret). Unset: the app uses
+  # the local paths.qdrant_store, for running it on your own machine.
+  dataset_repo_env: DATASET_REPO
+  qdrant_runtime_path: /tmp/qdrant_store   # local mode needs a writable path
+  concurrency_limit: 2                     # 2 CPUs; a lock serialises the searches
+  queue_max_size: 20
+
+# What the app shows. Styles live in css_path; every element has a CSS class
+# starting with beatle_rag_ (src/app/ui.py lists them).
+app:
+  title: Beatles Song Detective
+  subtitle: >-
+    Discover how The Beatles' songs were created: curiosities, stories,
+    people involved, technical equipment and much more
+  api_key_label: "Enter your OpenAI API key:"
+  api_key_help: >-
+    This key is not stored or logged.
+    [Get a key](https://platform.openai.com/api-keys)
+  question_placeholder: Ask about a Beatles song
+  # Not in the generation set, so the demo never shows an evaluated question.
+  examples:
+    - How did the Beatles use AI?
+    - Where did George write Here Comes the Sun?
+    - Who played on Yesterday besides Paul?
+    - Describe the sound of Helter Skelter
+  footer: >-
+    326 English Wikipedia articles, frozen in September 2026 ·
+    Text from Wikipedia, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) ·
+    Answers can be wrong: check the cited sources
+  css_path: src/app/style.css
+  logo_path: src/app/beatlessongdetective.png
+  font_path: src/app/fonts/inter-latin-wght-normal.woff2
