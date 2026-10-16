@@ -200,14 +200,24 @@ class SpaceConfig(BaseModel):
     qdrant_runtime_path: Path
     concurrency_limit: int
     queue_max_size: int
+    questions_repo: str  # private dataset receiving the Space's questions
+    questions_every_minutes: float
+    questions_folder: Path  # where they wait for the next push
+
+
+class AccessConfig(BaseModel):
+    """Who may use the owner's OpenAI key, and how often (src/app/chat.py)."""
+    password_env: str  # environment variable holding the regular password
+    unlimited_password_env: str  # ... and the admin one, which has no rate limit
+    max_questions: int
+    window_seconds: int
 
 
 class AppConfig(BaseModel):
     """What the Gradio app shows (src/app/ui.py)."""
     title: str
     subtitle: str
-    api_key_label: str
-    api_key_help: str  # Markdown
+    password_placeholder: str
     question_placeholder: str
     examples: list[str]
     footer: str  # Markdown
@@ -230,6 +240,7 @@ class Config(BaseModel):
     model_prices: dict[str, TokenPrices]  # model name -> prices, for cost reports
     eval: EvalConfig
     space: SpaceConfig
+    access: AccessConfig
     app: AppConfig
 
     @model_validator(mode="after")

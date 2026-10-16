@@ -4,8 +4,8 @@
 
 Loads everything once at startup: the config, the Qdrant store, the
 embedding models and the prompt. Each question then makes its own OpenAI
-client from the key the user pasted, or locally from the key in .env when
-the box is empty (src/app/chat.py)."""
+client from the owner's key in .env; on the Space the visitor must type a
+password first (src/app/chat.py)."""
 
 import os
 
@@ -33,7 +33,8 @@ from pathlib import Path  # noqa: E402
 
 import gradio as gr  # noqa: E402
 
-from src.app.chat import ChatContext, LockedSearcher, Message, respond  # noqa: E402
+from src.app.chat import ChatContext, LockedSearcher, Message, RateLimiter, respond  # noqa: E402
+from src.app.question_log import open_question_log  # noqa: E402
 from src.app.startup import prepare_store, runs_on_space  # noqa: E402
 from src.app.ui import build_ui, font_face_css  # noqa: E402
 from src.config import Config  # noqa: E402
@@ -66,14 +67,39 @@ THEME = gr.themes.Default(
 )
 
 
+def required_env(name: str) -> str:
+    """Fails at startup, not on the first question, when a secret is missing."""
+    value = os.getenv(name, "")
+    if not value:
+        raise RuntimeError(f"The environment variable {name} is not set")
+    return value
+
+
+def client_ip(request: gr.Request) -> str:
+    """Who is asking, for the rate limit. Behind the Space's proxy the real
+    address is the first entry of X-Forwarded-For; locally there is none."""
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else ""
+
+
 def main() -> None:
     config = Config.load(Path("config.yaml"))
     store = prepare_store(config)
     searcher = open_searcher(config, collection_name(config, config.chunking.active), store)
 
-    # Locally the key in .env answers when the box is empty. Never on the
-    # Space, even if a key were set there: every visitor pays with their own.
-    fallback_api_key = "" if runs_on_space(config) else os.getenv(config.llm.api_key_env, "")
+    # Every question is answered with the owner's key. On the Space both
+    # passwords are required (a missing one would leave the app open or the
+    # admin locked out); a local run asks for none.
+    # Only the Space saves the questions it is asked.
+    password, unlimited_password, log_question = "", "", None
+    if runs_on_space(config):
+        password = required_env(config.access.password_env)
+        unlimited_password = required_env(config.access.unlimited_password_env)
+        log_question = open_question_log(
+            config.space.questions_repo, config.space.questions_every_minutes, config.space.questions_folder,
+        )
 
     ctx = ChatContext(
         searcher=LockedSearcher(searcher),
@@ -81,13 +107,17 @@ def main() -> None:
         prices=config.model_prices[config.llm.model],
         system_prompt=load_prompt(config.llm.prompt_path),
         make_client=partial(make_client, config.llm.base_url),
-        fallback_api_key=fallback_api_key,
+        api_key=required_env(config.llm.api_key_env),
+        limiter=RateLimiter(config.access.max_questions, config.access.window_seconds),
+        password=password,
+        unlimited_password=unlimited_password,
+        log_question=log_question,
     )
 
     def answer_question(
-        question: str, api_key: str, messages: list[Message], turns: list[Turn],
+        question: str, password: str, messages: list[Message], turns: list[Turn], request: gr.Request,
     ) -> Iterator[tuple[str, list[Message], list[Turn]]]:
-        yield from respond(question, api_key, messages, turns, ctx)
+        yield from respond(question, password, messages, turns, ctx, client_ip(request))
 
     demo = build_ui(config.app, config.llm.max_question_chars, answer_question)
     demo.queue(max_size=config.space.queue_max_size, default_concurrency_limit=config.space.concurrency_limit)

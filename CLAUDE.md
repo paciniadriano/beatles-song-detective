@@ -95,12 +95,14 @@ citation: no ungrounded extras such as modern studio equivalents.
 - The application runs as a **public Hugging Face Space**, using the CPU only.
   Free Spaces now get ZeroGPU hardware only, which will not start without one
   `@spaces.GPU` function: app.py declares an empty one that is never called.
-- **No API keys in the repository.** The user pastes their own OpenAI key into a
-  single UI field, held per session and never logged.
-- **Nothing expensive runs on the user's key.** Corpus embedding and
-  evaluation-set generation run offline, on the developer's key. At request time
-  the user's key pays only for the answer.
-- Trying the app end to end must cost the user well under half a dollar.
+- **No API keys or passwords in the repository.** The Space holds three
+  secrets: `OPENAI_API_KEY` (the owner's), `APP_PASSWORD` and
+  `APP_UNLIMITED_PASSWORD` (admin). The visitor types a password into the single UI
+  field, never a key; it is never logged. A local run asks for none.
+- **Nothing expensive runs at request time except the answer.** Corpus
+  embedding and evaluation-set generation run offline. Each user (by IP) may
+  ask `access.max_questions` per `access.window_seconds` (10 per 5 minutes);
+  the admin password has no limit. Both are in `config.yaml`.
 
 ---
 
@@ -184,7 +186,9 @@ beatles-rag/
 │  │  └─ prompt.md
 │  ├─ app/
 │  │  ├─ startup.py          # finds the store: HF dataset repo or data/qdrant_store
-│  │  ├─ chat.py             # one chat turn: key, events, friendly errors
+│  │  ├─ chat.py             # one chat turn: password, rate limit, events, friendly errors
+│  │  ├─ question_log.py     # Space only: saves each question to a private dataset
+│  │  ├─ show_questions.py   # downloads them: terminal list + data/questions.csv
 │  │  ├─ render.py           # answer as escaped text + links built by code
 │  │  ├─ ui.py               # the Gradio layout; every class beatle_rag_*
 │  │  ├─ style.css           # the page's look, editable
@@ -547,16 +551,22 @@ order they ran (names as in the `stage` column of `eval/experiments.csv`;
   the static part of the prompt (instructions and tool schemas) must reach the
   1,024 tokens OpenAI needs to cache it (trap 11).
 - **Prompt attacks are handled mostly by design, not by the prompt.** The
-  user pays with their own key, the prompt is public, the only tool reads,
-  and history is per session. What remains: the prompt treats passages as
+  access needs a password and is rate limited per IP, the prompt is public,
+  the only tool reads, and history is per session. What remains: the prompt treats passages as
   data and keeps its role whatever a message asks; links are built by code
   from the sources, never written by the model; the app shows answers as
-  text, not HTML. No input classifier: another call on the user's key for
+  text, not HTML. No input classifier: another call on the owner's key for
   little protection.
 - **The Space loads the embedding models at startup**, into a fixed cache
   folder, so the first visitor does not wait for a download.
-- **The app (`src/app/`)**: the user pastes their key, used for one question
-  and never stored or logged. Answers are escaped text; the only HTML is
+- **The app (`src/app/`)**: the user types a password (regular or admin); the
+  answer is paid with the owner's key, and the rate limiter lives in server memory
+  (`chat.RateLimiter`, keyed by IP, so a page reload does not reset it).
+  On the Space, each question is saved (question, answer, searches, cost;
+  never the IP or the password) to the private dataset `space.questions_repo`
+  by `question_log.py` (CommitScheduler, every `questions_every_minutes`), in a
+  `finally` so an answer cut short by a closed page is saved too. Local runs
+  save nothing. Answers are escaped text; the only HTML is
   written by `render.py` (citation links, sources, time and cost). API errors
   arrive as llm.py's own exceptions and become chat messages.
 

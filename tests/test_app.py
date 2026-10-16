@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from src.app import chat, render, startup
-from src.app.chat import ChatContext, LockedSearcher, respond
+from src.app.chat import ChatContext, LockedSearcher, RateLimiter, respond
 from src.config import Config, TokenPrices
 from src.rag.agent import Done, Searching, Turn
 from src.rag.llm import InvalidKeyError, ModelUnavailableError, RateLimitedError, TextDelta, TokenUsage
@@ -103,14 +103,18 @@ def test_the_final_answer_carries_the_meta_line_and_a_cut_off_notice() -> None:
 PRICES = TokenPrices(input=0.10, cached_input=0.01, output=0.50)
 
 
-def _ctx(fallback_api_key: str = "") -> ChatContext:
+def _ctx(password: str = "", unlimited_password: str = "", max_questions: int = 100) -> ChatContext:
+    """By default a local context: no password asked, a limit nobody reaches."""
     return ChatContext(
         searcher=LockedSearcher(searcher=None),  # the fake agent never searches
         settings=CONFIG.llm,
         prices=PRICES,
         system_prompt="prompt",
         make_client=lambda key: f"client for {key}",
-        fallback_api_key=fallback_api_key,
+        api_key="sk-owner",
+        limiter=RateLimiter(max_questions, window_seconds=300),
+        password=password,
+        unlimited_password=unlimited_password,
     )
 
 
@@ -143,15 +147,8 @@ def test_an_answer_streams_then_joins_the_history(monkeypatch: pytest.MonkeyPatc
     assert turns == [Turn("Who sang?", "Paul [1].")]
 
 
-def test_without_a_key_nothing_is_asked(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(chat, "answer", _fake_agent(error=AssertionError("the agent must not run")))
-    _, messages, turns = _last("Who sang?", api_key="  ")
-    assert chat.MISSING_KEY in messages[-1]["content"]
-    assert turns == []
-
-
-def _client_used(monkeypatch: pytest.MonkeyPatch, api_key: str, fallback_api_key: str) -> str:
-    """Which client the agent was given, for a key box and a fallback key."""
+def _asked(monkeypatch: pytest.MonkeyPatch, ctx: ChatContext, password: str, user: str = "ip1") -> list[str]:
+    """The clients the agent was given, and the notice (if any) as the last item."""
     used: list[str] = []
 
     def fake_answer(question, history, searcher, client, settings, system_prompt):
@@ -159,16 +156,57 @@ def _client_used(monkeypatch: pytest.MonkeyPatch, api_key: str, fallback_api_key
         yield Done("x", Sources(), [], TokenUsage(), False)
 
     monkeypatch.setattr(chat, "answer", fake_answer)
-    list(respond("Who sang?", api_key, [], [], _ctx(fallback_api_key)))
-    return used[0]
+    steps = list(respond("Who sang?", password, [], [], ctx, user))
+    if not used:
+        used.append(steps[-1][1][-1]["content"])
+    return used
 
 
-def test_locally_an_empty_box_uses_the_env_key(monkeypatch: pytest.MonkeyPatch) -> None:
-    assert _client_used(monkeypatch, api_key="", fallback_api_key="sk-env") == "client for sk-env"
+def test_a_wrong_password_never_reaches_the_agent(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john")
+    assert chat.WRONG_PASSWORD in _asked(monkeypatch, ctx, "paul")[0]
+    assert chat.WRONG_PASSWORD in _asked(monkeypatch, ctx, "")[0]
 
 
-def test_a_pasted_key_wins_over_the_env_key(monkeypatch: pytest.MonkeyPatch) -> None:
-    assert _client_used(monkeypatch, api_key=" sk-pasted ", fallback_api_key="sk-env") == "client for sk-pasted"
+def test_a_right_password_answers_with_the_owner_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john")
+    assert _asked(monkeypatch, ctx, " ringo ") == ["client for sk-owner"]
+
+
+def test_locally_no_password_is_needed(monkeypatch: pytest.MonkeyPatch) -> None:
+    assert _asked(monkeypatch, _ctx(), "") == ["client for sk-owner"]
+
+
+def test_the_limit_refuses_the_next_question_for_that_user_only(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john", max_questions=2)
+    for _ in range(2):
+        assert _asked(monkeypatch, ctx, "ringo") == ["client for sk-owner"]
+    assert "You have used your 2 questions" in _asked(monkeypatch, ctx, "ringo")[0]
+    assert _asked(monkeypatch, ctx, "ringo", user="ip2") == ["client for sk-owner"]
+
+
+def test_the_window_ends_and_the_user_can_ask_again(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john", max_questions=1)
+    now = [1000.0]
+    monkeypatch.setattr(chat.time, "monotonic", lambda: now[0])
+    assert _asked(monkeypatch, ctx, "ringo") == ["client for sk-owner"]
+    assert "You have used" in _asked(monkeypatch, ctx, "ringo")[0]
+    now[0] += 300
+    assert _asked(monkeypatch, ctx, "ringo") == ["client for sk-owner"]
+
+
+def test_the_unlimited_password_works_after_the_limit_and_never_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john", max_questions=1)
+    assert _asked(monkeypatch, ctx, "ringo") == ["client for sk-owner"]
+    assert "You have used" in _asked(monkeypatch, ctx, "ringo")[0]
+    for _ in range(3):
+        assert _asked(monkeypatch, ctx, "john") == ["client for sk-owner"]
+
+
+def test_a_wrong_password_does_not_use_up_the_quota(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _ctx(password="ringo", unlimited_password="john", max_questions=1)
+    _asked(monkeypatch, ctx, "paul")
+    assert _asked(monkeypatch, ctx, "ringo") == ["client for sk-owner"]
 
 
 def test_a_question_over_the_limit_is_refused_before_the_agent(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -262,3 +300,57 @@ def test_the_app_imports_nothing_the_space_does_not_install() -> None:
     )
     result = subprocess.run([sys.executable, "-c", check], cwd=ROOT, capture_output=True, text=True, check=True)
     assert result.stdout.strip() == "[]"
+
+
+# --- question log ------------------------------------------------------------------
+
+
+def _logging_ctx(saved: list[dict], **kwargs: object) -> ChatContext:
+    ctx = _ctx(**kwargs)
+    ctx.log_question = saved.append
+    return ctx
+
+
+def test_an_answered_question_is_saved(monkeypatch: pytest.MonkeyPatch) -> None:
+    done = Done("Paul [1].", _sources(_chunk("c1")), ["who sang"], TokenUsage(input_tokens=1000), truncated=False)
+    monkeypatch.setattr(chat, "answer", _fake_agent(Searching("who sang"), TextDelta("Paul [1]."), done))
+    saved: list[dict] = []
+    list(respond("Who sang?", "", [], [], _logging_ctx(saved)))
+
+    assert len(saved) == 1
+    assert saved[0]["question"] == "Who sang?"
+    assert saved[0]["answer"] == "Paul [1]."
+    assert saved[0]["queries"] == ["who sang"]
+    assert saved[0]["completed"] is True
+
+
+def test_a_wrong_password_is_not_saved(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(chat, "answer", _fake_agent(error=AssertionError("the agent must not run")))
+    saved: list[dict] = []
+    list(respond("Who sang?", "paul", [], [], _logging_ctx(saved, password="ringo")))
+    assert saved == []
+
+
+def test_closing_the_page_mid_answer_still_saves_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(chat, "answer", _fake_agent(TextDelta("Paul "), TextDelta("sang.")))
+    saved: list[dict] = []
+    steps = respond("Who sang?", "", [], [], _logging_ctx(saved))
+    next(steps)  # the status message
+    next(steps)  # the first words
+    steps.close()  # what Gradio does when the visitor leaves
+
+    assert saved[0]["answer"] == "Paul "
+    assert saved[0]["completed"] is False
+
+
+def test_a_failing_log_never_breaks_the_answer(monkeypatch: pytest.MonkeyPatch) -> None:
+    done = Done("Paul.", Sources(), [], TokenUsage(), truncated=False)
+    monkeypatch.setattr(chat, "answer", _fake_agent(TextDelta("Paul."), done))
+    ctx = _ctx()
+
+    def broken(record: dict) -> None:
+        raise OSError("disk full")
+
+    ctx.log_question = broken
+    _, _, turns = list(respond("Who sang?", "", [], [], ctx))[-1]
+    assert turns == [Turn("Who sang?", "Paul.")]

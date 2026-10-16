@@ -7,9 +7,8 @@
   files, and local Qdrant needs a folder it can write its `.lock` into
   (CLAUDE.md, trap 8).
 - Locally, with the variable unset, the app opens `paths.qdrant_store`, the
-  folder publish.py wrote, and the key in `.env` is used when the key box is
-  empty (app.py). The Space never reads a key from its environment: every
-  visitor pays with their own."""
+  folder publish.py wrote, and no password is asked (app.py). The Space asks
+  for one, and answers with the owner's key from its secrets."""
 
 from __future__ import annotations
 

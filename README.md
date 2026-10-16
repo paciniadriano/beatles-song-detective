@@ -28,15 +28,22 @@ link to the exact revision of the article it came from.
 
 **Code:** [paciniadriano/beatles-song-detective on GitHub](https://github.com/paciniadriano/beatles-song-detective)
 
-> **Required: an OpenAI API key** (the only key the app uses). Paste it in the box at the top of the page.
-> It is used for your questions only, never stored and never logged.
-> A question costs about $0.0002–0.0005 (an estimate is shown under each
-> answer), so trying the app with 20 questions costs about a cent, well
-> under half a dollar.
+> **Required: a password.** Type it in the box at the top of the page; ask
+> me for it. The app answers with my OpenAI key, so each user is limited to
+> 10 questions every 5 minutes (a counter per IP address, reset 5 minutes after
+> the first question). A question costs about $0.0002–0.0005, an estimate
+> is shown under each answer.
 >
-> No key is stored in this repository. The steps that cost money (writing the
-> evaluation questions and running the evaluations) ran offline, on my own
-> key: yours pays only for your answers.
+> No key or password is stored in this repository: they are secrets of the
+> Space (`OPENAI_API_KEY`, `APP_PASSWORD` and an admin password
+> `APP_UNLIMITED_PASSWORD`, which has no limit). The steps that cost money
+> (writing the evaluation questions and running the evaluations) ran offline,
+> on my own key.
+>
+> Questions asked on the Space are saved, with their answers and searches, to
+> a private dataset, to improve the app. No IP address, password or other
+> personal data is saved. A local run saves nothing. The owner reads them with
+> `python -m src.app.show_questions` (a list, and `data/questions.csv`).
 
 ## Why I chose this topic for my RAG system
 
@@ -275,10 +282,11 @@ pip install -r requirements.txt
 DATASET_REPO=adrianopacini/beatles-song-detective-index python app.py
 ```
 
-The key is then pasted in the box, as on the Space. If you build the index
+Locally no password is needed (the box can stay empty); the answers use the
+OpenAI key in `.env`. If you build the index
 yourself (the steps below up to `python -m src.index.publish`), run
 `python app.py` without `DATASET_REPO`: the app opens
-`data/qdrant_store` and, when the box is empty, uses the OpenAI key in `.env`.
+`data/qdrant_store`.
 
 ### Reproducing the corpus, index and evaluation
 
@@ -322,7 +330,7 @@ python -m src.eval.generation_report 2026-09-30_1830_section_t256_o0_k8_steps1 -
   [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). This covers
   the published index and the question files in `eval/`.
 - **Models:** `nomic-ai/nomic-embed-text-v1.5` (Apache 2.0) for dense
-  vectors, `Qdrant/bm25` for sparse ones; answers by OpenAI's `gpt-6-luna` with the user's own key.
+  vectors, `Qdrant/bm25` for sparse ones; answers by OpenAI's `gpt-6-luna` with the owner's key.
 - **Font:** [Inter](https://rsms.me/inter/), under the SIL Open Font
   License 1.1; the file and its licence are in `src/app/fonts/`.
 - **Title image:** set in [Bootle](https://www.fontspace.com/bootle-font-f2373)

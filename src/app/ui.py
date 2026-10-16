@@ -6,9 +6,8 @@
       beatle_rag_title          the <h1>, holding the logo
         beatle_rag_logo         the title image (the title text is its alt)
       beatle_rag_subtitle       the line under it
-    beatle_rag_api_key_box      the border around the key and its help line
-      beatle_rag_api_key        the API key box
-      beatle_rag_api_key_help   the line under it
+    beatle_rag_api_key_box      the border around the password box
+      beatle_rag_api_key        the password box
     beatle_rag_chat_box         one border around the conversation and the question
       beatle_rag_chat           the conversation
       beatle_rag_input_row      question box and button
@@ -84,14 +83,13 @@ def build_ui(app: AppConfig, max_question_chars: int, respond: Respond) -> gr.Bl
         with gr.Column(elem_classes="beatle_rag_container"):
             gr.HTML(header_html(app.title, app.subtitle, app.logo_path), elem_classes="beatle_rag_header")
 
-            with gr.Group(elem_classes="beatle_rag_api_key_box"):  # one bordered box for both
-                api_key = gr.Textbox(
+            with gr.Group(elem_classes="beatle_rag_api_key_box"):
+                password = gr.Textbox(
                     show_label=False,
                     type="password",
-                    placeholder=app.api_key_label,
+                    placeholder=app.password_placeholder,
                     elem_classes="beatle_rag_api_key",
                 )
-                gr.Markdown(app.api_key_help, elem_classes="beatle_rag_api_key_help")
 
             # One group, so the chat and the question row share one border with
             # no gap between them, whatever spacing Gradio uses on the screen.
@@ -121,7 +119,7 @@ def build_ui(app: AppConfig, max_question_chars: int, respond: Respond) -> gr.Bl
 
             gr.Markdown(app.footer, elem_classes="beatle_rag_footer")
 
-        inputs = [question, api_key, chat, turns]
+        inputs = [question, password, chat, turns]
         outputs = [question, chat, turns]
         for trigger in (question.submit, ask.click):
             trigger(respond, inputs, outputs, show_progress="hidden", api_visibility="private")

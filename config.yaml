@@ -269,6 +269,22 @@ space:
   qdrant_runtime_path: /tmp/qdrant_store   # local mode needs a writable path
   concurrency_limit: 2                     # 2 CPUs; a lock serialises the searches
   queue_max_size: 20
+  # Questions asked on the Space are saved here (src/app/question_log.py):
+  # question, answer and searches, never the IP or the password. A private
+  # dataset, created on the first push; local runs save nothing.
+  questions_repo: adrianopacini/beatles-song-detective-questions
+  questions_every_minutes: 5   # how often new questions are pushed
+  questions_folder: /tmp/questions
+
+# Who may ask, and how much. The passwords are read from the environment
+# variables named here (never stored in this file). On the Space both are
+# required; a local run needs neither. Questions are answered with the key in
+# llm.api_key_env.
+access:
+  password_env: APP_PASSWORD
+  unlimited_password_env: APP_UNLIMITED_PASSWORD  # admin: no rate limit
+  max_questions: 10        # per user (IP) in each window
+  window_seconds: 300      # the window starts at the user's first question
 
 # What the app shows. Styles live in css_path; every element has a CSS class
 # starting with beatle_rag_ (src/app/ui.py lists them).
@@ -277,10 +293,7 @@ app:
   subtitle: >-
     Discover how The Beatles' songs were created: curiosities, stories,
     people involved, technical equipment and much more
-  api_key_label: "Enter your OpenAI API key:"
-  api_key_help: >-
-    This key is not stored or logged.
-    [Get a key](https://platform.openai.com/api-keys)
+  password_placeholder: Enter your password to use the system
   question_placeholder: Ask about a Beatles song
   # Not in the generation set, so the demo never shows an evaluated question.
   examples:
